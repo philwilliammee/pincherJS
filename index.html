@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<!--
+
+pincher3 
+
+-->
+<html>
+<head>
+    <title>pincherJS</title>
+    <link rel="shortcut icon" href="favicon.ico"/>
+    
+</head>
+<body>
+    
+<script src="build/three.js"></script>
+<script src="js/vendor/jquery-1.11.2.js"></script>
+<!--script src="build/orbitalControls.js"></script--> 
+<script src="http://stemkoski.github.io/Three.js/js/OrbitControls.js"></script>
+<script src="http://stemkoski.github.io/Three.js/js/DAT.GUI.min.js"></script>
+<div id="canvas" ></div>
+<script src="js/pincherGL.js"></script>
+<script>
+ var pincher = new Pincher(600, 600);
+ var container = document.getElementById( 'canvas' );
+ container.appendChild( pincher.renderer.domElement );
+</script>
+</body>
+</html>
