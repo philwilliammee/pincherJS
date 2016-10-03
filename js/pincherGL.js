@@ -54,7 +54,7 @@ this.doTest = true;
             m1: 0, m2: 0, m3: 0, m4: 0, m5:0,
             doTest: parent.doTest,
     };
-   	    
+        
     //gridHelper.position.z += -100;
     parent.scene.add( gridHelper );
     parent.camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);  
@@ -83,14 +83,14 @@ this.doTest = true;
     
     // Load the JSON files and provide callback functions (modelToScene
     var loader = new THREE.JSONLoader();
-    loader.load( "obj/p2.json", createShoulder );
-    loader.load( "obj/p1.json", createBase );
-    loader.load( "obj/p3.json", createBicep );
-    loader.load( "obj/p4.json", createWrist );
-    loader.load( "obj/p5.json", createGripper );
-    loader.load( "obj/pRail.json", createGrail );
-    loader.load( "obj/pGR.json", createRG );
-    loader.load( "obj/pGL.json", createLG );
+    loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p2.json", createShoulder );
+    loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p1.json", createBase );
+    loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p3.json", createBicep );
+    loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p4.json", createWrist );
+    loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p5.json", createGripper );
+    loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/pRail.json", createGrail );
+    loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/pGR.json", createRG );
+    loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/pGL.json", createLG );
     
     // After loading JSON OBJ add it to the scene
     function createBase( geometry, materials ) {
@@ -123,7 +123,7 @@ this.doTest = true;
     
     var cubeVisible = gui.add( parameters, 'doTest' ).name('doTest?').listen();
     cubeVisible.onChange(function(value) 
-    {   parent.doTest = value;  	});
+    {   parent.doTest = value;    });
     
     gui.open();       
     }
@@ -255,7 +255,8 @@ function incGripper( rad ){
  
 function animate() {
   requestAnimationFrame( animate );
-   if( joints.shoulder && joints.elbow && joints.wrist && joints.gripper && parent.doTest ){
+   //should make sure grippers load also
+   if( joints.shoulder && joints.elbow && joints.wrist && joints.gripper && joints.LG && joints.RG && parent.doTest ){
         incBase( .002 );
         incWrist( .002 );
         incElbow( -.002 );
