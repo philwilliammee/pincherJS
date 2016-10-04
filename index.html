@@ -9,6 +9,17 @@ pincher3
     <title>pincherJS</title>
     <link rel="shortcut icon" href="favicon.ico"/>
     
+    <style>
+        #myCanvas{
+            position: relative;
+        }
+        #myGui{
+            position: absolute;
+            top: 15px;
+            left: 600px;
+        }
+    </style>
+    
 </head>
 <body>
     
@@ -16,13 +27,16 @@ pincher3
 <script src="js/vendor/jquery-1.11.2.js"></script>
 <!--script src="build/orbitalControls.js"></script--> 
 <script src="http://stemkoski.github.io/Three.js/js/OrbitControls.js"></script>
-<script src="http://stemkoski.github.io/Three.js/js/DAT.GUI.min.js"></script>
-<div id="canvas" ></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.0/dat.gui.js"></script>
+<div id="myCanvas" style="position: relative !important" >
+    <div id="myGui" style="position: absolute !important;top: 15px !important; left: 25px !important;" ></div>
+</div>
 <script src="js/pincherGL.js"></script>
 <script>
  var pincher = new Pincher(600, 600);
- var container = document.getElementById( 'canvas' );
- container.appendChild( pincher.renderer.domElement );
+ var container = document.getElementById( 'myCanvas' );
+  container.appendChild( pincher.renderer.domElement );
+ pincher.gui.domElement.id = "myGui";
 </script>
 </body>
 </html>

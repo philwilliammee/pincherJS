@@ -35,6 +35,7 @@ this.scene;
 this.camera; 
 this.controls;
 this.doTest = true;
+this.gui = new dat.GUI();
  function init(){
     parent.renderer = new THREE.WebGLRenderer( { antialias: false  } );
     parent.scene = new THREE.Scene();
@@ -47,8 +48,6 @@ this.doTest = true;
     var axes = new THREE.AxisHelper(250);
     axes.position.set(0,-128,0);
     parent.scene.add(axes);
-    
-    gui = new dat.GUI();
 
     parameters = {
             m1: 0, m2: 0, m3: 0, m4: 0, m5:0,
@@ -100,7 +99,7 @@ this.doTest = true;
       //scene.add( joints.base );
       parent.scene.add( parts.b );
       
-    var folder1 = gui.addFolder('Move Axis');
+    var folder1 = parent.gui.addFolder('Move Axis');
     var m1 = folder1.add( parameters, 'm1' ).min(-314).max(314).step(1).listen();
     var m2 = folder1.add( parameters, 'm2' ).min(-314).max(314).step(1).listen();
     var m3 = folder1.add( parameters, 'm3' ).min(-314).max(314).step(1).listen();
@@ -121,11 +120,11 @@ this.doTest = true;
         setRG(value/100.0);
     });    
     
-    var cubeVisible = gui.add( parameters, 'doTest' ).name('doTest?').listen();
+    var cubeVisible =parent.gui.add( parameters, 'doTest' ).name('doTest?').listen();
     cubeVisible.onChange(function(value) 
     {   parent.doTest = value;    });
     
-    gui.open();       
+    parent.gui.open();       
     }
 
     function createShoulder( geometry, materials ) {
