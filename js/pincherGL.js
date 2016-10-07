@@ -35,7 +35,7 @@ this.scene;
 this.camera; 
 this.controls;
 this.doTest = true;
-this.gui = new dat.GUI({autoPlace : false});
+this.gui = new dat.GUI();
 //this.gui = new dat.GUI();
  function init(){
     parent.renderer = new THREE.WebGLRenderer( { antialias: false  } );
