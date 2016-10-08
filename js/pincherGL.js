@@ -18,24 +18,21 @@ var parent = this;
 var joints={};
 var parts ={
     b: new THREE.Object3D(),
+    sRoll: new THREE.Object3D(),
     s: new THREE.Object3D(),
     e: new THREE.Object3D(),
-    w: new THREE.Object3D(),
-    g: new THREE.Object3D()
+    w: new THREE.Object3D()
 };
-parts.b.add(parts.s);
+parts.b.add(parts.sRoll);
+parts.sRoll.add(parts.s);
 parts.s.add(parts.e);
 parts.e.add(parts.w);
-parts.w.add(parts.g);
 
-var rads = [0,0,0,0];
-var gPos = 0;
 this.renderer; 
 this.scene; 
 this.camera; 
 this.controls;
-this.doTest = true;
-this.gui = new dat.GUI();
+this.doTest = false;
 //this.gui = new dat.GUI();
  function init(){
     parent.renderer = new THREE.WebGLRenderer( { antialias: false  } );
@@ -50,16 +47,10 @@ this.gui = new dat.GUI();
     axes.position.set(0,-128,0);
     parent.scene.add(axes);
 
-    parameters = {
-            m1: 0, m2: 0, m3: 0, m4: 0, m5:0,
-            doTest: parent.doTest,
-    };
-        
-    //gridHelper.position.z += -100;
     parent.scene.add( gridHelper );
     parent.camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);  
     parent.camera.position.z = 230;
-    parent.camera.position.x = 100;
+    parent.camera.position.x = 0;
     parent.camera.position.y = 0;   
     //parent.controls = new THREE.OrbitControls( parent.camera,  );
     parent.controls = new THREE.OrbitControls( parent.camera, parent.renderer.domElement );
@@ -92,54 +83,26 @@ this.gui = new dat.GUI();
     loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/pGR.json", createRG );
     loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/pGL.json", createLG );
     
-    // After loading JSON OBJ add it to the scene
+     // After loading JSON OBJ add it to the scene
     function createBase( geometry, materials ) {
       var material = new THREE.MeshFaceMaterial(materials);
       joints.base = new THREE.Mesh( geometry, material );
       parts.b.add(joints.base);
       //scene.add( joints.base );
       parent.scene.add( parts.b );
-      
-    var folder1 = parent.gui.addFolder('Move Axis');
-    var m1 = folder1.add( parameters, 'm1' ).min(-314).max(314).step(1).listen();
-    var m2 = folder1.add( parameters, 'm2' ).min(-314).max(314).step(1).listen();
-    var m3 = folder1.add( parameters, 'm3' ).min(-314).max(314).step(1).listen();
-    var m4 = folder1.add( parameters, 'm4' ).min(-314).max(314).step(1).listen();
-    var m5 = folder1.add( parameters, 'm5' ).min(-314).max(314).step(1).listen();
-    folder1.open();
-
-    m1.onChange(function(value) 
-    {   setBase(value/100.0);   });
-    m2.onChange(function(value) 
-    {   setShoulder(value/100.0);  });
-    m3.onChange(function(value) 
-    {   setElbow(value/100.0);   });
-    m4.onChange(function(value) 
-    {   setWrist(value/100.0);   });
-    m5.onChange(function(value){   
-        setLG(value/100.0);
-        setRG(value/100.0);
-    });    
-    
-    var cubeVisible =parent.gui.add( parameters, 'doTest' ).name('doTest?').listen();
-    cubeVisible.onChange(function(value) 
-    {   parent.doTest = value;    });
-    
-    parent.gui.open();       
-    }
-
+  }       
     function createShoulder( geometry, materials ) {
       var material = new THREE.MeshFaceMaterial(materials);
       joints.shoulder = new THREE.Mesh( geometry, material );
-      parts.s.add(joints.shoulder);
+      parts.sRoll.add(joints.shoulder);
       //scene.add( joints.shoulder );
-      parent.scene.add(parts.s);
+      parent.scene.add(parts.sRoll);
     }
 
     function createBicep( geometry, materials ) {
       var material = new THREE.MeshFaceMaterial(materials);
       joints.elbow = new THREE.Mesh( geometry, material );
-      parts.e.add(joints.elbow);
+      parts.s.add(joints.elbow);
       //joints.shoulder.add(joints.elbow);
     }
 
@@ -147,7 +110,7 @@ this.gui = new dat.GUI();
       var material = new THREE.MeshFaceMaterial(materials);
       joints.wrist = new THREE.Mesh( geometry, material );
       //joints.elbow.add(joints.wrist);
-      parts.w.add( joints.wrist );
+      parts.e.add( joints.wrist );
     }
 
      function createGripper( geometry, materials ) {
@@ -155,56 +118,51 @@ this.gui = new dat.GUI();
       joints.gripper = new THREE.Mesh( geometry, material );
       joints.gripper.closing = true;
       joints.gripper.pos = 0;
-      parts.g.add(joints.gripper);
+      parts.w.add(joints.gripper);
     }
 
     function createGrail( geometry, materials ) {
       var material = new THREE.MeshFaceMaterial(materials);
       joints.grail = new THREE.Mesh( geometry, material );
-      parts.g.add( joints.grail );
+      parts.w.add( joints.grail );
     }
 
      function createRG( geometry, materials ) {
       var material = new THREE.MeshFaceMaterial(materials);
       joints.RG = new THREE.Mesh( geometry, material );
-      parts.g.add( joints.RG );
+      parts.w.add( joints.RG );
     }
 
      function createLG( geometry, materials ) {
       var material = new THREE.MeshFaceMaterial(materials);
       joints.LG = new THREE.Mesh( geometry, material );
-      parts.g.add( joints.LG );   
+      parts.w.add( joints.LG );   
     }    
  };
  
- function setBase( rad ){
-    rads[0] = rad;
-    parts.s.rotation.y = rads[0];
-}
+  this.setShoulderRoll =function( rad ){
+    parts.sRoll.rotation.y = rad;
+};
+ 
+ this.setShoulder =function( rad ){
+    parts.s.rotation.z = rad;
+};
 
-function setShoulder( rad ){
-    rads[1] = rad;
-    parts.e.rotation.z = rads[1];
-}
+this.setElbow = function( rad ){
+    parts.e.translateX( 106.7 );
+    parts.e.rotation.z = rad;
+    parts.e.translateX( -106.7 ); 
+};
 
-function setElbow( rad ){
-    rads[2] = rad;
-    parts.w.translateX( 106.7 );
-    parts.w.rotation.z = rads[2];
-    parts.w.translateX( -106.7 ); 
-}
-
-function setWrist( rad ){
-    rads[3] = rad;
-    parts.g.translateX( 213.2 );
-    parts.g.rotation.z = rads[3];
-    parts.g.translateX( -213.2  );    
-}
+this.setWrist = function( rad ){
+    parts.w.translateX( 213.2 );
+    parts.w.rotation.z = rad;
+    parts.w.translateX( -213.2  );    
+};
 
 function setLG( rad ){
     //need to convert degrees into distance
     joints.LG.position.z = +joints.gripper.pos;
-    
 }
 
 function setRG( rad ){
@@ -212,25 +170,25 @@ function setRG( rad ){
     joints.RG.position.z = -joints.gripper.pos;   
 }
 
-function incBase( rad ){
-    rads[0] += rad;
-    setBase(rads[0]);
-}
+this.incShoulderRoll = function( rad ){
+    parts.sRoll.rotation.y += rad;
+}; 
 
-function incShoulder( rad ){
-    rads[1] += rad;
-    setShoulder( rads[1] );
-}
+this.incShoulder = function( rad ){
+    parts.s.rotation.z += rad;
+};
 
-function incElbow( rad ){
-    rads[2] += rad;
-    setElbow(rads[2]);
-}
-
-function incWrist( rad ){
-    rads[3] -= rad;
-    setWrist( rads[3] );
-}
+this.incElbow = function( rad ){
+    parts.e.translateX( 106.7 );
+    parts.e.rotation.z += rad;
+    parts.e.translateX( -106.7 );
+    };
+    
+this.incWrist = function( rad ){
+    parts.w.translateX( 213.2 );
+    parts.w.rotation.z += rad;
+    parts.w.translateX( -213.2  );    
+};
 
 function incGripper( rad ){
     if (joints.gripper.closing){
@@ -253,18 +211,38 @@ function incGripper( rad ){
    parent.renderer.render(parent.scene, parent.camera);
  };
  
+ this.setAngles = function(rads){
+     this.setShoulderRoll(rads[0]);
+     this.setShoulder(rads[1]);
+     this.setElbow(rads[2]);
+     this.setWrist(rads[3]);
+ };
+ 
+ this.getAngles =function(){
+     return [ 
+        parts.sRoll.rotation.y,
+        parts.s.rotation.z,
+        parts.e.rotation.z,
+        parts.w.rotation.z,
+     ];
+
+ };
+ 
 function animate() {
   requestAnimationFrame( animate );
-   //should make sure grippers load also
-   if( joints.shoulder && joints.elbow && joints.wrist && joints.gripper && joints.LG && joints.RG && parent.doTest ){
-        incBase( .002 );
-        incWrist( .002 );
-        incElbow( -.002 );
-        incShoulder( .002 );
-        incGripper ( .2 ); 
-    }  
+
   parent.controls.update();
   render();
+}
+
+this.test = function(){
+       if( joints.shoulder && joints.elbow && joints.wrist && joints.gripper && joints.LG && joints.RG ){
+        parent.incShoulderRot( .002 );       
+        parent.incShoulder( .002 );
+        parent.incElbow( -.002 );
+        parent.incWrist( .002 );
+        incGripper ( .2 ); 
+    }
 }
 
 function onWindowResize() {

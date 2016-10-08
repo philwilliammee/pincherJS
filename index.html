@@ -8,18 +8,6 @@ pincher3
 <head>
     <title>pincherJS</title>
     <link rel="shortcut icon" href="favicon.ico"/>
-    
-    <style>
-        #myCanvas{
-            position: relative;
-        }
-        #myGui{
-            position: absolute;
-            top: 15px;
-            left: 600px;
-        }
-    </style>
-    
 </head>
 <body>
     
@@ -32,11 +20,8 @@ pincher3
     <div id="myGui" style="position: absolute !important;top: 15px !important; left: 25px !important;" ></div>
 </div>
 <script src="js/pincherGL.js"></script>
-<script>
- var pincher = new Pincher(600, 600);
- var container = document.getElementById( 'myCanvas' );
-  container.appendChild( pincher.renderer.domElement );
- pincher.gui.domElement.id = "myGui";
-</script>
+<script src="js/guiPanel.js"></script><!-- requires pincherGL -->
+<script src="js/ikEngine.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
