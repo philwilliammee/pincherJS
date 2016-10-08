@@ -25,7 +25,7 @@ function test(){
         if (pincher.doTest){
             pincher.setAngles(angles);
         }else{
-            var ret = ik.calc_positions( TP.x, TP.y , TP.z, GA, "TP");
+            var ret = ik.calc_positions( TP.x, TP.y , TP.z, GA);
             //console.log(ret.rads, ret.e);
             if (!ret.e){
                 pincher.setAngles(ret.rads);
