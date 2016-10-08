@@ -1,11 +1,14 @@
 /* global ik */
 
 var container = document.getElementById( 'myCanvas' );
-var pincher = new Pincher();
+var GUIcontainer = document.getElementById( 'myGUI' );
+var canvasContainer = document.getElementById( 'jumbotron' );
+var pincher = new Pincher(canvasContainer);
 var gui = new GUI(pincher);
+gui.gui.domElement.id = "gui";
+$("#myGUI").html($("#gui"));
 ik = new IK();
 container.appendChild( pincher.renderer.domElement );
-gui.gui.domElement.id = "myGui";
 
 var TP = {
     x:0,

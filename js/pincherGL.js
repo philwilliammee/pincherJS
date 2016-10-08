@@ -8,11 +8,11 @@
 
 /* global THREE */
 
-var Pincher = function(width, height){
-if (!(width && height)){
-    width=window.innerWidth;
-    height=window.innerHeight;
-}
+var Pincher = function(canvasContainer){
+console.log($(canvasContainer).width(), $(canvasContainer).height());
+var width=$(canvasContainer).width();
+var height=$(canvasContainer).height();
+
 var parent = this;
  // ElectronicArmory.com
 var joints={};
@@ -243,14 +243,17 @@ this.test = function(){
         parent.incWrist( .002 );
         incGripper ( .2 ); 
     }
-}
+};
 
-function onWindowResize() {
+$( window ).resize(function(){
+    console.log("resized window");
+    width=$(canvasContainer).width();
+    height= 350;
   parent.camera.aspect = width / height;
   parent.camera.updateProjectionMatrix();
   parent.renderer.setSize( width, height );
   render();
-}
+});
 
  init();
  animate();
