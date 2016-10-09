@@ -6,7 +6,8 @@ var canvasContainer = document.getElementById( 'jumbotron' );
 var pincher = new Pincher(canvasContainer);
 var gui = new GUI(pincher);
 gui.gui.domElement.id = "gui";
-$("#myGUI").html($("#gui"));
+$("#gui").detach().appendTo("#myGUI")
+
 ik = new IK();
 container.appendChild( pincher.renderer.domElement );
 
