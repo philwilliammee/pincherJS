@@ -24,10 +24,11 @@ Array.prototype.move = function (old_index, new_index) {
 
 
 var SideBarView = function (service) {
+    this.service = service;
     var parent = this;
     var editPoseModalView;
     this.initialize = function () {
-        editPoseModalView = new EditPoseMdalContentView();
+        editPoseModalView = new EditPoseMdalContentView(service);
         this.$el = $('<div/>');
         this.$el.on('click', '.clickable-row', this.selectRow);
         this.$el.on('dblclick', '.clickable-row', this.editRow);
@@ -35,7 +36,21 @@ var SideBarView = function (service) {
         this.$el.on('click', '#remove-btn', removeBtnClicked);
         this.$el.on('click', '#up-btn', upBtnClicked);
         this.$el.on('click', '#down-btn', downBtnClicked);
+        this.$el.on('click', '#saveModal', saveModal);
     };
+    
+    function saveModal(){
+        console.log("save modal");
+        newPose = {};
+        $("form#editPoseForm :input").each(function(){
+            var input = $(this); // This is the jquery object of the input, do what you will
+            newPose[input.attr('id')] = input.val();
+        });
+        //TODO add some validation
+        console.log(newPose);
+        service.updatePose(newPose);
+        parent.render();
+    }    
 
     this.render = function() {
         this.$el.html(this.template(service.poses));
@@ -97,8 +112,8 @@ var SideBarView = function (service) {
     };  
     
     this.editRow=function(){
-        console.log("edit");
-        var data = service.poses[1];
+        var myID = parseInt($(".active").find('th').text());
+        var data = service.getPoseByID(myID);
         editPoseModalView.setModalData(data);
         $('#editModal').modal('show');
     };
@@ -107,8 +122,8 @@ var SideBarView = function (service) {
     
 };
 
-var EditPoseMdalContentView = function() {
-
+var EditPoseMdalContentView = function(sideBarParent) {
+    
     var poseData;
 
     this.render = function() {
@@ -125,6 +140,7 @@ var EditPoseMdalContentView = function() {
         this.$el = $('<div/>');
         this.render();
     };
+    
     this.initialize();
 
 };

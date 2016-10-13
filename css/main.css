@@ -5,6 +5,7 @@
    ========================================================================== */
 body {
     padding-top: 52px;/* space between nav and body*/
+    background-image: -webkit-linear-gradient(top,#222 0,#111 100%);
 }
 .sidebar-btn{
     min-width:25%;

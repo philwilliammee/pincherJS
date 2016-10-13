@@ -42,6 +42,30 @@ var Service = function(){
         };
         return newPose;
     };
+    
+    this.getPoseByID = function(myID){
+        for (var i=0; i<parent.poses.length; i++){
+            if (myID === parent.poses[i].id){
+                return parent.poses[i];
+            }
+        }
+
+    };
+    
+    this.updatePose = function(myPose){
+        for (var i=0; i<parent.poses.length; i++){
+            if (parseInt(myPose.id) === parent.poses[i].id){
+                //parent.poses[i] = myPose;
+                parent.poses[i].m1 = parseInt(myPose.m1);
+                parent.poses[i].m2 = parseInt(myPose.m2);
+                parent.poses[i].m3 = parseInt(myPose.m3);
+                parent.poses[i].m4 = parseInt(myPose.m4);
+                parent.poses[i].m5 = parseInt(myPose.m5);
+                return parent.poses[i];//testing
+            }
+        }
+        return//not found
+    };    
    
     
     function test(){
