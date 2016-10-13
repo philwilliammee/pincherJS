@@ -9,31 +9,30 @@
 /* global THREE */
 
 var Pincher = function(canvasContainer){
-console.log($(canvasContainer).width(), $(canvasContainer).height());
-var width=$(canvasContainer).width();
-var height=$(canvasContainer).height();
+    //console.log($(canvasContainer).width(), $(canvasContainer).height());
+    var width=$(canvasContainer).width();
+    var height=$( window ).height()/1.5; //$(canvasContainer).height();
 
-var parent = this;
- // ElectronicArmory.com
-var joints={};
-var parts ={
-    b: new THREE.Object3D(),
-    sRoll: new THREE.Object3D(),
-    s: new THREE.Object3D(),
-    e: new THREE.Object3D(),
-    w: new THREE.Object3D()
-};
-parts.b.add(parts.sRoll);
-parts.sRoll.add(parts.s);
-parts.s.add(parts.e);
-parts.e.add(parts.w);
+    var parent = this;
+    var joints={};
+    var parts ={
+        b: new THREE.Object3D(),
+        sRoll: new THREE.Object3D(),
+        s: new THREE.Object3D(),
+        e: new THREE.Object3D(),
+        w: new THREE.Object3D()
+    };
+    parts.b.add(parts.sRoll);
+    parts.sRoll.add(parts.s);
+    parts.s.add(parts.e);
+    parts.e.add(parts.w);
 
-this.renderer; 
-this.scene; 
-this.camera; 
-this.controls;
-this.doTest = false;
-//this.gui = new dat.GUI();
+    this.renderer; 
+    this.scene; 
+    this.camera; 
+    this.controls;
+    this.doTest = false;
+    //this.gui = new dat.GUI();
  function init(){
     parent.renderer = new THREE.WebGLRenderer( { antialias: false  } );
     parent.scene = new THREE.Scene();
@@ -248,7 +247,7 @@ this.test = function(){
 $( window ).resize(function(){
     console.log("resized window");
     width=$(canvasContainer).width();
-    height= 350;
+    height= $( window ).height()/1.5;
   parent.camera.aspect = width / height;
   parent.camera.updateProjectionMatrix();
   parent.renderer.setSize( width, height );

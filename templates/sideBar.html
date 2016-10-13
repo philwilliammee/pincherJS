@@ -1,0 +1,97 @@
+<script id="sideBar-tpl" type="text/template">
+    <div class="col-xs-6 col-sm-4 sidebar-offcanvas" >
+        <!-- Default panel contents -->
+        <div id="sidebar" class="panel panel-default"> 
+            <div class="panel-heading">
+                Pose Editor
+            </div> 
+            <!-- could use this to show hide help -->
+            <!--div class="panel-body"> 
+                <p>Some default panel content here. Nulla vitae elit libero, a pharetra augue. Aenean lacinia bibendum nulla sed consectetur. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Nullam id dolor id nibh ultricies vehicula ut id elit.
+                </p> 
+            </div--> 
+
+            <table class="table">
+                <thead>
+                    <tr><th>#</th><th>m1</th><th>m2</th><th>m3</th><th>m4</th><th>MS</th></tr>
+                </thead>
+                <tbody>
+                {{#each this}}
+                    <tr class="clickable-row"><th scope="row">{{id}}</th>
+                        <td>{{m1}}</td>
+                        <td>{{m2}}</td>
+                        <td>{{m3}}</td>
+                        <td>{{m4}}</td>
+                        <td>{{m5}}</td>                                
+                    </tr>
+                {{/each}}
+                        
+
+                </tbody>
+            </table>
+        </div><!--panel--> 
+    <div class="btn-group sidebar-btns" role="group" aria-label="Pose Editor CRUD">
+      <button id="add-btn" type="button" class="btn btn-default sidebar-btn">Add</button>
+      <button id="remove-btn" type="button" class="btn btn-default sidebar-btn">Remove</button>
+      <button id="up-btn" type="button" class="btn btn-default sidebar-btn">Move Up</button>
+      <button id="down-btn" type="button" class="btn btn-default sidebar-btn">Move Down</button>
+    </div>  
+    </div> 
+
+        <!-- Modal -->
+    <div id="editModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+</div>
+</script>
+
+<script id="editPoseModal-tpl" type="text/template">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" 
+                   data-dismiss="modal">
+                       <span aria-hidden="true">&times;</span>
+                       <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    Modal title
+                </h4>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="modal-body">
+                
+                <form role="form">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Email address</label>
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                      <input type="text" class="form-control"
+                          id="exampleInputPassword1" placeholder="Password" value=""/>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                        <input type="checkbox"/> Check me out
+                    </label>
+                  </div>
+                  <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+                
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                            Close
+                </button>
+                <button type="button" class="btn btn-primary">
+                    Save changes
+                </button>
+            </div>
+</script>

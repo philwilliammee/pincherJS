@@ -3,6 +3,78 @@
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
+body {
+    padding-top: 52px;/* space between nav and body*/
+}
+.sidebar-btn{
+    min-width:25%;
+}
+.sidebar-btns{
+    width:100%
+}
+#sidebar{
+/*    min-width: 300px;*/
+    height: 60vh !important;
+    overflow-y: auto; 
+    margin-bottom: 5px;
+}
+
+.container .jumbotron, .container-fluid .jumbotron {
+    padding: 0;
+    margin: 0;
+    min-height: 50%;
+}
+.container {
+    /* padding-right: 15px;*/
+    /* padding-left: 15px; */
+     margin-right: auto;
+     margin-left: auto;
+     width: 100%;
+}
+.panel{
+    padding: 5px;
+    padding-bottom: 25px;
+}
+#myContainer{
+    padding: 0;
+    margin:0;
+}
+#gui{
+    width: 90% !important;
+}
+.close-button{
+    width: 85% !important;
+}
+/*
+.dg li{
+    background-color: #dcdcdc !important;
+    color: black;
+}
+*/
+.dg .property-name {
+    width: 20% !important;
+}
+.dg .c {
+    width: 80% !important;
+}
+.dg .slider {
+    width: 80% !important;
+}
+.dg .c input[type=text] {
+    width: 20% !important;
+}
+.well {
+   background-color:black !important ; 
+   background-image: none;
+    padding: 5px;
+    padding-bottom: 25px;
+}
+/*
+.navbar { min-height:28px; height: 28px  }
+.navbar .navbar-brand{ padding: 0px 12px;font-size: 16px;line-height: 28px; }
+.navbar .navbar-nav > li > a {  padding-top: 0px; padding-bottom: 0px; line-height: 28px; }
+.navbar-brand {padding-top:0px;  padding-bottom:0px }
+*/
 
 
 

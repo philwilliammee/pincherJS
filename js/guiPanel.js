@@ -6,7 +6,11 @@
 
 /* global TP, dat */
 
-GUI = function(r){
+GUI = function(service){
+    var r = service.pincher;
+    var TP = service.TP;
+    var GA = service.GA;
+    
     this.gui = new dat.GUI();
     var folder1 = this.gui.addFolder('Move Axis');
     var folder2 = this.gui.addFolder('kinematics');
