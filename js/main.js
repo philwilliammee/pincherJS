@@ -29,8 +29,7 @@ var GUIcontainer = document.getElementById( 'myGUI' );
             this.gui = new GUI(service);
             this.gui.gui.domElement.id = "gui";
             $("#gui").detach().appendTo("#myGUI");  
-            //enable kinematics @TODO test() should be done on an event and renamed enable kinematics
-            //test();
+            animateTest();
         });   
         
         $("#panel2Template").load("./templates/panel2.html", function(tmpl){
@@ -43,7 +42,7 @@ var GUIcontainer = document.getElementById( 'myGUI' );
     });   
     
     //this should be called do IK
-    function test(){
+    function animateTest(){
         inc = function(){
             var angles = service.pincher.getAngles();
             $(angles).each(function(i){
@@ -52,12 +51,6 @@ var GUIcontainer = document.getElementById( 'myGUI' );
             angles[2] += -.004;
             if (service.pincher.doTest){
                 service.pincher.setAngles(angles);
-            }else{
-                var ret = service.ik.calc_positions( service.TP.x, service.TP.y , service.TP.z, service.GA);
-                //console.log(ret.rads, ret.e);
-                if (!ret.e){
-                    service.pincher.setAngles(ret.rads);
-                }
             }
         };
         var iter = new iterator(inc, 10);
