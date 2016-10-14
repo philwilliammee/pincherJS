@@ -87,6 +87,11 @@ IK = function(){
         //rotate backwards
         //a_list =  [a*b for a,b in zip(a_list,direction)] 
         //mod_a = [a%360 for a in a_list]
+        /*
+        for (var i=0; i<self.a.length; i++){
+            self.a[i] = self.a[i] %(Math.PI);
+        }
+        */
         return  {e:error, rads: self.a} ;
     };
 

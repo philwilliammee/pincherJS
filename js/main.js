@@ -1,4 +1,6 @@
-/* global ik */
+/*! main.js - v0.0.1 - (c) 2016 Phil Williammee - licensed MIT */
+
+/* global ik, Handlebars, GUI_View, SideBarView, NavView, EditPoseMdalContentView, Panel2View */
 
 var GUIcontainer = document.getElementById( 'myGUI' );
 (function () {
@@ -26,13 +28,21 @@ var GUIcontainer = document.getElementById( 'myGUI' );
             //@TODO this should get fixed
             this.gui = new GUI(service);
             this.gui.gui.domElement.id = "gui";
-            $("#gui").detach().appendTo("#myGUI");   
-            test();
-        });         
+            $("#gui").detach().appendTo("#myGUI");  
+            //enable kinematics @TODO test() should be done on an event and renamed enable kinematics
+            //test();
+        });   
+        
+        $("#panel2Template").load("./templates/panel2.html", function(tmpl){
+            Panel2View.prototype.template = Handlebars.compile($(tmpl).html());
+            $("#panel2Template").html(new Panel2View(service).render().$el);
+        });
+        
         container.appendChild( pincherDom );
         
     });   
     
+    //this should be called do IK
     function test(){
         inc = function(){
             var angles = service.pincher.getAngles();

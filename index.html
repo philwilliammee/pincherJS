@@ -1,9 +1,29 @@
 <!DOCTYPE HTML>
 <!--
 
-pincher3 
+The MIT License
 
+pincherJS Copyright 2016 Philip S Williammee.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 -->
+
 <html lang="en">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -21,7 +41,6 @@ pincher3
 </head>
 <body>
     <div id="navTemplate"></div>
-    
     <div class="container">
         <div class="row row-offcanvas row-offcanvas-right">
             <div id="myContainer" class="col-xs-12 col-sm-8">
@@ -29,14 +48,7 @@ pincher3
                 <!-- two panels below the canvas -->
                 <div >
                     <div id="panel1Template"></div>
-                    
-                    <div class="col-xs-6 col-lg-6 well">
-                        <p>Empty panel 2</p>
-                        <p>&nbsp;</p>
-                        <p>&nbsp;</p>
-                        <p>&nbsp;</p>
-                        <p>&nbsp;</p>
-                    </div><!--/.col-xs-6.col-lg-4-->
+                    <div id="panel2Template"></div>
                 </div><!--/row-->
             </div><!--/.col-xs-12.col-sm-9-->
             <div id="sideBarTemplate"></div>
@@ -61,12 +73,12 @@ pincher3
 <!-- load views -->
 <script src="js/views/nav_view.js"></script>
 <script src="js/views/panel1View.js"></script>
+<script src="js/views/panel2View.js"></script>
 <script src="js/views/sideBarView.js"></script>
 
 <!-- render views -->
 <script src="js/main.js"></script>
 <script>
-    
 </script>
 </body>
 </html>

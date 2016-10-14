@@ -141,120 +141,120 @@ var Pincher = function(canvasContainer){
  
   this.setShoulderRoll =function( rad ){
     parts.sRoll.rotation.y = rad;
-};
- 
- this.setShoulder =function( rad ){
-    parts.s.rotation.z = rad;
-};
-
-this.setElbow = function( rad ){
-    parts.e.translateX( 106.7 );
-    parts.e.rotation.z = rad;
-    parts.e.translateX( -106.7 ); 
-};
-
-this.setWrist = function( rad ){
-    parts.w.translateX( 213.2 );
-    parts.w.rotation.z = rad;
-    parts.w.translateX( -213.2  );    
-};
-
-function setLG( rad ){
-    //need to convert degrees into distance
-    joints.LG.position.z = +joints.gripper.pos;
-}
-
-function setRG( rad ){
-    //need to convert degrees into distance
-    joints.RG.position.z = -joints.gripper.pos;   
-}
-
-this.incShoulderRoll = function( rad ){
-    parts.sRoll.rotation.y += rad;
-}; 
-
-this.incShoulder = function( rad ){
-    parts.s.rotation.z += rad;
-};
-
-this.incElbow = function( rad ){
-    parts.e.translateX( 106.7 );
-    parts.e.rotation.z += rad;
-    parts.e.translateX( -106.7 );
     };
-    
-this.incWrist = function( rad ){
-    parts.w.translateX( 213.2 );
-    parts.w.rotation.z += rad;
-    parts.w.translateX( -213.2  );    
-};
 
-function incGripper( rad ){
-    if (joints.gripper.closing){
-        joints.gripper.pos -= rad;
-        if (joints.gripper.pos <= -15){
-            joints.gripper.closing = false;
-        }
-        
-    }else{
-        joints.gripper.pos += rad;
-        if (joints.gripper.pos >= 0.0){
-            joints.gripper.closing = true;
-        }
+     this.setShoulder =function( rad ){
+        parts.s.rotation.z = rad;
+    };
+
+    this.setElbow = function( rad ){
+        parts.e.translateX( 106.7 );
+        parts.e.rotation.z = rad;
+        parts.e.translateX( -106.7 ); 
+    };
+
+    this.setWrist = function( rad ){
+        parts.w.translateX( 213.2 );
+        parts.w.rotation.z = rad;
+        parts.w.translateX( -213.2  );    
+    };
+
+    function setLG( rad ){
+        //need to convert degrees into distance
+        joints.LG.position.z = +joints.gripper.pos;
     }
-    joints.LG.position.z = +joints.gripper.pos;
-    joints.RG.position.z = -joints.gripper.pos;
-}
 
- var render = function () {
-   parent.renderer.render(parent.scene, parent.camera);
- };
- 
- this.setAngles = function(rads){
-     this.setShoulderRoll(rads[0]);
-     this.setShoulder(rads[1]);
-     this.setElbow(rads[2]);
-     this.setWrist(rads[3]);
- };
- 
- this.getAngles =function(){
-     return [ 
-        parts.sRoll.rotation.y,
-        parts.s.rotation.z,
-        parts.e.rotation.z,
-        parts.w.rotation.z,
-     ];
-
- };
- 
-function animate() {
-  requestAnimationFrame( animate );
-
-  parent.controls.update();
-  render();
-}
-
-this.test = function(){
-       if( joints.shoulder && joints.elbow && joints.wrist && joints.gripper && joints.LG && joints.RG ){
-        parent.incShoulderRot( .002 );       
-        parent.incShoulder( .002 );
-        parent.incElbow( -.002 );
-        parent.incWrist( .002 );
-        incGripper ( .2 ); 
+    function setRG( rad ){
+        //need to convert degrees into distance
+        joints.RG.position.z = -joints.gripper.pos;   
     }
-};
 
-$( window ).resize(function(){
-    console.log("resized window");
-    width=$(canvasContainer).width();
-    height= $( window ).height()/1.5;
-  parent.camera.aspect = width / height;
-  parent.camera.updateProjectionMatrix();
-  parent.renderer.setSize( width, height );
-  render();
-});
+    this.incShoulderRoll = function( rad ){
+        parts.sRoll.rotation.y += rad;
+    }; 
 
- init();
- animate();
- 
+    this.incShoulder = function( rad ){
+        parts.s.rotation.z += rad;
+    };
+
+    this.incElbow = function( rad ){
+        parts.e.translateX( 106.7 );
+        parts.e.rotation.z += rad;
+        parts.e.translateX( -106.7 );
+        };
+
+    this.incWrist = function( rad ){
+        parts.w.translateX( 213.2 );
+        parts.w.rotation.z += rad;
+        parts.w.translateX( -213.2  );    
+    };
+
+    function incGripper( rad ){
+        if (joints.gripper.closing){
+            joints.gripper.pos -= rad;
+            if (joints.gripper.pos <= -15){
+                joints.gripper.closing = false;
+            }
+
+        }else{
+            joints.gripper.pos += rad;
+            if (joints.gripper.pos >= 0.0){
+                joints.gripper.closing = true;
+            }
+        }
+        joints.LG.position.z = +joints.gripper.pos;
+        joints.RG.position.z = -joints.gripper.pos;
+    }
+
+     var render = function () {
+       parent.renderer.render(parent.scene, parent.camera);
+     };
+
+     this.setAngles = function(rads){
+         this.setShoulderRoll(rads[0]);
+         this.setShoulder(rads[1]);
+         this.setElbow(rads[2]);
+         this.setWrist(rads[3]);
+     };
+
+     this.getAngles =function(){
+         return [ 
+            parts.sRoll.rotation.y,
+            parts.s.rotation.z,
+            parts.e.rotation.z,
+            parts.w.rotation.z
+         ];
+
+     };
+
+    function animate() {
+      requestAnimationFrame( animate );
+      //console.log(parent.radsToMotors());
+      parent.controls.update();
+      render();
+    }
+
+    this.test = function(){
+           if( joints.shoulder && joints.elbow && joints.wrist && joints.gripper && joints.LG && joints.RG ){
+            parent.incShoulderRot( .002 );       
+            parent.incShoulder( .002 );
+            parent.incElbow( -.002 );
+            parent.incWrist( .002 );
+            incGripper ( .2 ); 
+        }
+    };
+
+    $( window ).resize(function(){
+        console.log("resized window");
+        width=$(canvasContainer).width();
+        height= $( window ).height()/1.5;
+      parent.camera.aspect = width / height;
+      parent.camera.updateProjectionMatrix();
+      parent.renderer.setSize( width, height );
+      render();
+    });
+
+     init();
+     animate();
+
  };

@@ -4,14 +4,26 @@
    Author's custom styles
    ========================================================================== */
 body {
+    height: 100vh;
     padding-top: 52px;/* space between nav and body*/
+    background: no-repeat;
     background-image: -webkit-linear-gradient(top,#222 0,#111 100%);
+}
+.navbar { max-height:28px; height: 28px  }
+.alert {
+    margin-right:10px;
+    height: 28px;
+    margin: auto;
+    margin-top: 5px;
+    padding: 5px;
+    position: relative;
+    top: 5px;
 }
 .sidebar-btn{
     min-width:25%;
 }
 .sidebar-btns{
-    width:100%
+    width:99%
 }
 #sidebar{
 /*    min-width: 300px;*/
@@ -23,7 +35,7 @@ body {
 .container .jumbotron, .container-fluid .jumbotron {
     padding: 0;
     margin: 0;
-    min-height: 50%;
+    min-height: 50vh;
 }
 .container {
     /* padding-right: 15px;*/
@@ -70,6 +82,7 @@ body {
     padding: 5px;
     padding-bottom: 25px;
 }
+
 /*
 .navbar { min-height:28px; height: 28px  }
 .navbar .navbar-brand{ padding: 0px 12px;font-size: 16px;line-height: 28px; }

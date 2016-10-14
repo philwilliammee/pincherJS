@@ -1,27 +1,4 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
- //move this to common
-Array.prototype.move = function (old_index, new_index) {
-    while (old_index < 0) {
-        old_index += this.length;
-    }
-    while (new_index < 0) {
-        new_index += this.length;
-    }
-    if (new_index >= this.length) {
-        var k = new_index - this.length;
-        while ((k--) + 1) {
-            this.push(undefined);
-        }
-    }
-    this.splice(new_index, 0, this.splice(old_index, 1)[0]);
-    return this; // for testing purposes
-};
-
+/* - v0.0.1 - (c) 2016 Phil Williammee - licensed MIT */
 
 var SideBarView = function (service) {
     this.service = service;
@@ -47,7 +24,6 @@ var SideBarView = function (service) {
             newPose[input.attr('id')] = input.val();
         });
         //TODO add some validation
-        console.log(newPose);
         service.updatePose(newPose);
         parent.render();
     }    
@@ -64,6 +40,7 @@ var SideBarView = function (service) {
     };
     
     function addBtnClicked(event){
+        log.info("add button clicked");
         service.poses.push(new service.pose());
         parent.render();
         return false;
@@ -97,18 +74,15 @@ var SideBarView = function (service) {
     
     function downBtnClicked(event){
         var myID = parseInt($(".active").find('th').text());
+        //replace with for loop
         $(service.poses).each(function(i, el){
-            console.log(el);
             if (i<service.poses.length-1 && el.id === myID){
                service.poses.move(i, ++i);
                parent.render();
-               return false;
             }else{
                 console.log("cant move element");
             }
         });
-        
-        return false;
     };  
     
     this.editRow=function(){
@@ -122,10 +96,8 @@ var SideBarView = function (service) {
     
 };
 
-var EditPoseMdalContentView = function(sideBarParent) {
-    
+var EditPoseMdalContentView = function() {
     var poseData;
-
     this.render = function() {
         this.$el.html(this.template(poseData));
         return this;
