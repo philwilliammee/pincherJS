@@ -42,6 +42,7 @@
             $("#rads_gui").detach().appendTo("#radsGUI");   
             
             animateTest();
+            
         });   
         
         $("#panel2Template").load("./templates/panel2.html", function(tmpl){

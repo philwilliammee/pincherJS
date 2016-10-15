@@ -23,7 +23,7 @@ var GUI_View = function(service){
         this.$el = $('<div/>');
         this.$el.on('click', '#showIK', showIK);
         this.$el.on('click', '#showMotors', showMotors);
-        this.$el.on('click', '#showRads', showRads);
+        this.$el.on('click', '#showRads', showRads);         
     };
     
     function showIK() {

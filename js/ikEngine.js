@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 
+/* global log */
+
 IK = function(){
     var self = this;
     this.l12 = 0.0;                      // hypotenuse belween a1 & a3
@@ -80,7 +82,7 @@ IK = function(){
         calc_x_y();
         
         if (self.l12 > (self.l[1]+self.l[2])){
-            console.log("target position can not be reached");
+            log.warning("target position can not be reached");
             error = true;
         }
 
