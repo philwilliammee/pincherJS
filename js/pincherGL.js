@@ -12,7 +12,14 @@ var Pincher = function(canvasContainer){
     //console.log($(canvasContainer).width(), $(canvasContainer).height());
     var width=$(canvasContainer).width();
     var height=$( window ).height()/1.5; //$(canvasContainer).height();
-
+    //TWEEN
+    var userOpts	= {
+            range		: 800,
+            duration	: 2500,
+            delay		: 200,
+            easing		: 'Elastic.EaseInOut'
+    };
+    
     var parent = this;
     var joints={};
     var parts ={

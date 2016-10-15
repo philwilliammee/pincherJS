@@ -20,21 +20,25 @@ ax_GUI = function(service){
     //these must convert motor positions to angles in rads
     m1.onChange(function(value){   
         var motors = getMotorSliders();
+        service.modifyActivePose(motors);//if a pose is selected update it
         var rads= service.motorsToRads(motors);
         service.pincher.setAngles(rads);
     });
     m2.onChange(function(value){   
         var motors = getMotorSliders();
+        service.modifyActivePose(motors);//if a pose is selected update it
         var rads= service.motorsToRads(motors);
         service.pincher.setAngles(rads);
     });
     m3.onChange(function(value){   
         var motors = getMotorSliders();
+        service.modifyActivePose(motors);//if a pose is selected update it
         var rads= service.motorsToRads(motors);
         service.pincher.setAngles(rads); 
     });
     m4.onChange(function(value){   
         var motors = getMotorSliders();
+        service.modifyActivePose(motors);//if a pose is selected update it
         var rads= service.motorsToRads(motors);
         service.pincher.setAngles(rads);
     });

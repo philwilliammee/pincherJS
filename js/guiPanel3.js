@@ -18,16 +18,24 @@ radsGUI = function(service){
     var m5 = this.gui.add( parameters, 'angle5' ).min(0).max(628).step(1).listen();
 
     m1.onChange(function(value){   
-        r.setShoulderRoll(value/100.0);   
+        r.setShoulderRoll(value/100.0); 
+       var ax_array = service.radsToMotors();
+        service.modifyActivePose(ax_array);//if a pose is selected update it
     });
     m2.onChange(function(value){   
         r.setShoulder(value/100.0);  
+        var ax_array = service.radsToMotors();
+        service.modifyActivePose(ax_array);//if a pose is selected update it        
     });
     m3.onChange(function(value){   
         r.setElbow(value/100.0);   
+       var ax_array = service.radsToMotors();
+        service.modifyActivePose(ax_array);//if a pose is selected update it        
     });
     m4.onChange(function(value){   
-        r.setWrist(value/100.0);   
+        r.setWrist(value/100.0);  
+       var ax_array = service.radsToMotors();
+        service.modifyActivePose(ax_array);//if a pose is selected update it        
     });
     m5.onChange(function(value){   
         

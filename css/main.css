@@ -2,10 +2,13 @@
    Author's custom styles
    ========================================================================== */
 body {
-    height: 100vh;
+    min-height: 100vh;
     padding-top: 52px;/* space between nav and body*/
     background: no-repeat;
     background-image: -webkit-linear-gradient(top,#222 0,#111 100%);
+}
+.table>thead>tr>td.active, .table>tbody>tr>td.active, .table>tfoot>tr>td.active, .table>thead>tr>th.active, .table>tbody>tr>th.active, .table>tfoot>tr>th.active, .table>thead>tr.active>td, .table>tbody>tr.active>td, .table>tfoot>tr.active>td, .table>thead>tr.active>th, .table>tbody>tr.active>th, .table>tfoot>tr.active>th {
+    background-color: #ccc;
 }
 .navbar { max-height:28px; height: 28px  }
 .alert {

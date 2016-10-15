@@ -4,12 +4,11 @@
         <!-- Default panel contents -->
         <div id="sidebar" class="panel panel-default"> 
             <div class="panel-heading">
-                Pose Editor
+                <h4 class="text-center">Pose Editor</h4>
             </div> 
             <!-- could use this to show hide help -->
             <!--div class="panel-body"> 
-                <p>Some default panel content here. Nulla vitae elit libero, a pharetra augue. Aenean lacinia bibendum nulla sed consectetur. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Nullam id dolor id nibh ultricies vehicula ut id elit.
-                </p> 
+                <p>Some default panel content here. </p> 
             </div--> 
 
             <table class="table">
@@ -18,7 +17,7 @@
                 </thead>
                 <tbody>
                 {{#each this}}
-                    <tr class="clickable-row"><th scope="row">{{id}}</th>
+                    <tr id={{id}} class="clickable-row {{active}}"><th scope="row">{{id}}</th>
                         <td>{{m1}}</td>
                         <td>{{m2}}</td>
                         <td>{{m3}}</td>
@@ -34,14 +33,46 @@
       <button id="remove-btn" type="button" class="btn btn-default sidebar-btn">Del</button>
       <button id="up-btn" type="button" class="btn btn-default sidebar-btn">Up</button>
       <button id="down-btn" type="button" class="btn btn-default sidebar-btn">Down</button>
-    </div>  
+    </div> 
+    
+    <div class="well">
+    <div class="container">
+      <h3 class="text-center">Run Sequence</h3>
+      <hr/>
+      <div class="player text-center">
+        <!--
+        <button type="button" id="button_fbw" class="btn" >
+          <i class="fa fa-fast-backward"></i>
+        </button>
+
+        <button type="button" id="button_bw" class="btn" >
+          <i class="fa fa-backward"></i>
+        </button>
+        -->
+        <button type="button" id="button_play" class="btn fa fa-play" >
+        </button>
+
+        <button type="button" id="button_stop" class="btn fa fa-stop" >
+        </button>
+
+        <button type="button" id="button_fw" class="btn fa fa-forward" >
+        </button>
+        <!--
+        <button type="button" id="button_ffw" class="btn" >
+          <i class="fa fa-fast-forward"></i>
+        </button>    
+      </div>
+      <p class="text-center"><small>inspired from <a href="http://jsfiddle.net/Zxfn8/" target="_blank">here</a></small></p>
+      -->
+              </div>
+    </div>
+    </div>                
     </div> 
 
         <!-- Modal -->
     <div id="editModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-
         </div>
     </div>
 </div>

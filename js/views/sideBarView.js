@@ -1,11 +1,14 @@
 /* - v0.0.1 - (c) 2016 Phil Williammee - licensed MIT */
 
+/* global log */
+
 var SideBarView = function (service) {
     this.service = service;
     var parent = this;
     var editPoseModalView;
     this.initialize = function () {
         editPoseModalView = new EditPoseMdalContentView(service);
+        service.poseEditor = parent;//add this to pose editor so service can update this may want to change this
         this.$el = $('<div/>');
         this.$el.on('click', '.clickable-row', this.selectRow);
         this.$el.on('dblclick', '.clickable-row', this.editRow);
@@ -14,6 +17,11 @@ var SideBarView = function (service) {
         this.$el.on('click', '#up-btn', upBtnClicked);
         this.$el.on('click', '#down-btn', downBtnClicked);
         this.$el.on('click', '#saveModal', saveModal);
+        
+        //play sequence buttons
+        this.$el.on('click', '#button_play', buttonPlayPress);
+        this.$el.on('click', '#button_stop', buttonStopPress);
+        this.$el.on('click', '#button_ffw', buttonForwardPress);
     };
     
     function saveModal(){
@@ -34,13 +42,38 @@ var SideBarView = function (service) {
         return this;
     };
     
+    this.getActive = function(){
+        var myID = parseInt($(".active").find('th').text());
+        return myID;
+    };
+    
+    this.setActiveByID = function(myID){
+        $(this).addClass('active').siblings().removeClass('active');
+        for ( var i=0; i<service.poses.length; i++){
+            if (myID === service.poses[i].id){
+                service.poses[i].active = "active";
+            }else{
+                service.poses[i].active = "";
+            }
+        }   
+        parent.render();
+    }
+    
     this.selectRow = function(event){
         $(this).addClass('active').siblings().removeClass('active');
+        var myID = parseInt($(this).prop("id"));
+        for ( var i=0; i<service.poses.length; i++){
+            if (myID === service.poses[i].id){
+                service.poses[i].active = "active";
+            }else{
+                service.poses[i].active = "";
+            }
+        }
         return false;
     };
     
     function addBtnClicked(event){
-        log.info("add button clicked");
+        log.info("added a new pose");
         service.poses.push(new service.pose());
         parent.render();
         return false;
@@ -92,8 +125,59 @@ var SideBarView = function (service) {
         $('#editModal').modal('show');
     };
     
-    this.initialize();
+    //play Pose sequence controls
+    var state = 'stop';
+    var d3 = this.$el;
+
+    function buttonBackPress() {
+        console.log("button back invoked.");
+    }
+
+    function buttonForwardPress() {
+        console.log("button forward invoked.");
+    }
+
+    function buttonRewindPress() {
+        console.log("button rewind invoked.");
+    }
+
+    function buttonFastforwardPress() {
+        console.log("button fast forward invoked.");
+    }
+
+    function buttonPlayPress() {
+        var button = $("#button_play");
+        if(state==='stop'){
+          state='play';
+          button.addClass('btn-success'); 
+          button.addClass("fa-pause");  
+          parent.service.playSequence();
+        }
+        else if(state==='play' || state==='resume'){
+          state = 'pause';
+          button.removeClass( "fa-pause").addClass( "fa-play"); 
+          parent.service.stopSequence()
+          
+        }
+        else if(state==='pause'){
+          state = 'resume';
+          button.addClass( "fa-pause");  
+          parent.service.playSequence();
+        }
+        log.info("button play pressed, state is "+state);
+    }
+
+    function buttonStopPress(){
+        state = 'stop';
+        var button = $("#button_play").removeClass('btn-success');
+        button.removeClass("fa-pause");
+        button.addClass("fa-play");
+        parent.service.stopSequence();
+        console.log("button stop invoked.");    
+    }
     
+    this.initialize();
+  
 };
 
 var EditPoseMdalContentView = function() {
@@ -107,12 +191,11 @@ var EditPoseMdalContentView = function() {
         poseData = data;
         this.render();
     };
- 
+    
     this.initialize = function() {
         this.$el = $('<div/>');
         this.render();
     };
-    
     this.initialize();
 
 };
