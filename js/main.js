@@ -35,6 +35,10 @@ var GUIcontainer = document.getElementById( 'myGUI' );
         $("#panel2Template").load("./templates/panel2.html", function(tmpl){
             Panel2View.prototype.template = Handlebars.compile($(tmpl).html());
             $("#panel2Template").html(new Panel2View(service).render().$el);
+            //@TODO this should get fixed
+            this.ax_gui = new ax_GUI(service);
+            this.ax_gui.gui.domElement.id = "ax_gui";
+            $("#ax_gui").detach().appendTo("#myGUI2");              
         });
         
         container.appendChild( pincherDom );

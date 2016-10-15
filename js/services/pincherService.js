@@ -77,17 +77,35 @@ var Service = function(){
     
     this.radsToMotors =function(){
        var radArray = this.pincher.getAngles();
-       var servoDegOffset = [-90, 90, 180, 180];
+       //should assert length of radArray here
+       var servoDegOffset = [270, 90, 180, 180];
        var ax_array = [];
-        for (var i=0; i<radArray.length; i++){
-           var deg = rad_2_degree(radArray[i]);
-           deg = (deg + servoDegOffset[i]);
+       for (var i=0; i<radArray.length; i++){
+           var deg = ((rad_2_degree(radArray[i]))%360);
+           deg = (deg + servoDegOffset[i])%360;
            var ax = deg_2_ax(deg);
+           //motors should be integer values
+           ax = Math.round(ax);
            ax_array.push(ax);
        };
        //console.log(ax_array); 
        //var ax_array = servo_2_angle_offset(ax_array);
        return ax_array;
+   };
+   
+       this.motorsToRads =function(motorArray){
+       //should assert length of motor array here
+       //need to verify motors are turning in the correct direction
+       var servoRadOffset = [-4.71239, -1.5708, -3.14159, -3.14159];
+       var radArray = [];
+       for (var i=0; i<motorArray.length; i++){
+           var rad = ((ax_2_rad(motorArray[i])));//may need modulo math.PI
+           rad = (rad + servoRadOffset[i]);// apply offset may need modulo math.PI
+           radArray.push(rad);
+       };
+       //console.log(ax_array); 
+       //var ax_array = servo_2_angle_offset(ax_array);
+       return radArray;
    };
     
 };
@@ -133,6 +151,10 @@ function rad_2_degree(rad){
 
 function degree_2_rad(deg){
     return deg*Math.PI/180;
+}
+
+function ax_2_rad(ax){
+    return (((ax) * 0.00511326171875)+0.523598775598) ;//convert to rads and add 30 degrees
 }
 
 function ax_2_deg(ax){
