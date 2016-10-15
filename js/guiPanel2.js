@@ -7,16 +7,16 @@ ax_GUI = function(service){
     var TP = service.TP;
     
     this.gui = new dat.GUI();
-    var folder1 = this.gui.addFolder('Move Motors');
+    //var this.gui = this.gui.addFolder('Move Motors');
     var parameters = {
             m1: 512, m2: 512, m3: 512, m4: 512, m5:0
     };    
-    var m1 = folder1.add( parameters, 'm1' ).min(0).max(1024).step(1).listen();
-    var m2 = folder1.add( parameters, 'm2' ).min(0).max(1024).step(1).listen();
-    var m3 = folder1.add( parameters, 'm3' ).min(0).max(1024).step(1).listen();
-    var m4 = folder1.add( parameters, 'm4' ).min(0).max(1024).step(1).listen();
-    var m5 = folder1.add( parameters, 'm5' ).min(0).max(1024).step(1).listen();
-    folder1.open();    
+    var m1 = this.gui.add( parameters, 'm1' ).min(0).max(1024).step(1).listen();
+    var m2 = this.gui.add( parameters, 'm2' ).min(0).max(1024).step(1).listen();
+    var m3 = this.gui.add( parameters, 'm3' ).min(0).max(1024).step(1).listen();
+    var m4 = this.gui.add( parameters, 'm4' ).min(0).max(1024).step(1).listen();
+    var m5 = this.gui.add( parameters, 'm5' ).min(0).max(1024).step(1).listen();
+    this.gui.open();    
     //these must convert motor positions to angles in rads
     m1.onChange(function(value){   
         var motors = getMotorSliders();
