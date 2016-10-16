@@ -1,11 +1,10 @@
 /*! main.js - v0.0.1 - (c) 2016 Phil Williammee - licensed MIT */
 
-/* global ik, Handlebars, GUI_View, SideBarView, NavView, EditPoseMdalContentView, Panel2View */
+/* global ik, Handlebars, GUI_View, SideBarView, NavView, EditPoseMdalContentView, Panel2View, RunSequenceView */
 
 //var GUIcontainer = document.getElementById( 'myGUI' );
 (function () {
-    /* ---------------------------------- Local Variables ---------------------------------- */
-    
+    /* ---------------------------------- Local Variables ---------------------------------- */ 
     var service = new Service();
     //pass the service the dom the robot goes in "canvasContainer"
     service.init(document.getElementById( 'jumbotron' )).done(function(pincherDom){//returns the dom element with robot in it
@@ -21,6 +20,11 @@
             EditPoseMdalContentView.prototype.template = Handlebars.compile($("#editPoseModal-tpl").html());
             $("#sideBarTemplate").html(new SideBarView(service).render().$el);
         });  
+        
+        $("#runSequenceTemplate").load("./templates/runSequencePanel.html", function(tmpl){
+            RunSequenceView.prototype.template = Handlebars.compile($("#runSequence-tpl").html());
+            $("#runSequenceTemplate").html(new RunSequenceView(service).render().$el);
+        });         
         
         $("#panel1Template").load("./templates/panel1.html", function(tmpl){
             GUI_View.prototype.template = Handlebars.compile($(tmpl).html());

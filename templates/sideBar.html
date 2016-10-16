@@ -1,76 +1,43 @@
 <!--  - v0.0.1 - (c) 2016 Phil Williammee - licensed MIT -->
 <script id="sideBar-tpl" type="text/template">
-    <div class="col-xs-6 col-sm-4 sidebar-offcanvas" >
-        <!-- Default panel contents -->
-        <div id="sidebar" class="panel panel-default"> 
-            <div class="panel-heading">
-                <h4 class="text-center">Pose Editor</h4>
-            </div> 
-            <!-- could use this to show hide help -->
-            <!--div class="panel-body"> 
-                <p>Some default panel content here. </p> 
-            </div--> 
+<div class="col-xs-6 col-sm-4 sidebar-offcanvas" >
+    <!-- Default panel contents -->
+    <div id="sidebar" class="panel panel-default"> 
+        <div class="panel-heading">
+            <h4 class="text-center">Pose Editor</h4>
+        </div> 
+        <!-- could use this to show hide help -->
+        <!--div class="panel-body"> 
+            <p>Some default panel content here. </p> 
+        </div--> 
 
-            <table class="table">
-                <thead>
-                    <tr><th>#</th><th>m1</th><th>m2</th><th>m3</th><th>m4</th><th>MS</th></tr>
-                </thead>
-                <tbody>
+        <table class="table">
+            <thead>
+                <tr><th>#</th><th>m1</th><th>m2</th><th>m3</th><th>m4</th><th>MS</th></tr>
+            </thead>
+            <tbody>
                 {{#each this}}
-                    <tr id={{id}} class="clickable-row {{active}}"><th scope="row">{{id}}</th>
-                        <td>{{m1}}</td>
-                        <td>{{m2}}</td>
-                        <td>{{m3}}</td>
-                        <td>{{m4}}</td>
-                        <td>{{m5}}</td>                                
-                    </tr>
+                <tr id={{id}} class="clickable-row {{active}}"><th scope="row">{{id}}</th>
+                    <td>{{m1}}</td>
+                    <td>{{m2}}</td>
+                    <td>{{m3}}</td>
+                    <td>{{m4}}</td>
+                    <td>{{m5}}</td>                                
+                </tr>
                 {{/each}}
-                </tbody>
-            </table>
-        </div><!--panel--> 
+            </tbody>
+        </table>
+    </div><!--panel--> 
     <div class="btn-group sidebar-btns" role="group" aria-label="Pose Editor CRUD">
-      <button id="add-btn" type="button" class="btn btn-default sidebar-btn">Add</button>
-      <button id="remove-btn" type="button" class="btn btn-default sidebar-btn">Del</button>
-      <button id="up-btn" type="button" class="btn btn-default sidebar-btn">Up</button>
-      <button id="down-btn" type="button" class="btn btn-default sidebar-btn">Down</button>
-    </div> 
-    
-    <div class="well">
-    <div class="container">
-      <h3 class="text-center">Run Sequence</h3>
-      <hr/>
-      <div class="player text-center">
-        <!--
-        <button type="button" id="button_fbw" class="btn" >
-          <i class="fa fa-fast-backward"></i>
-        </button>
-
-        <button type="button" id="button_bw" class="btn" >
-          <i class="fa fa-backward"></i>
-        </button>
-        -->
-        <button type="button" id="button_play" class="btn fa fa-play" >
-        </button>
-
-        <button type="button" id="button_stop" class="btn fa fa-stop" >
-        </button>
-
-        <button type="button" id="button_fw" class="btn fa fa-forward" >
-        </button>
-        <!--
-        <button type="button" id="button_ffw" class="btn" >
-          <i class="fa fa-fast-forward"></i>
-        </button>    
-      </div>
-      <p class="text-center"><small>inspired from <a href="http://jsfiddle.net/Zxfn8/" target="_blank">here</a></small></p>
-      -->
-              </div>
-    </div>
+        <button id="add-btn" type="button" class="btn btn-default sidebar-btn">Add</button>
+        <button id="remove-btn" type="button" class="btn btn-default sidebar-btn">Del</button>
+        <button id="up-btn" type="button" class="btn btn-default sidebar-btn">Up</button>
+        <button id="down-btn" type="button" class="btn btn-default sidebar-btn">Down</button>
     </div>                
-    </div> 
+</div> 
 
-        <!-- Modal -->
-    <div id="editModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- Modal -->
+<div id="editModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
         </div>
@@ -80,51 +47,51 @@
 
 
 <script id="editPoseModal-tpl" type="text/template">
-<!-- Modal Header -->
-<div class="modal-header">
+    <!-- Modal Header -->
+    <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">
-        <span aria-hidden="true">&times;</span>
-        <span class="sr-only">Close</span>
+    <span aria-hidden="true">&times;</span>
+    <span class="sr-only">Close</span>
     </button>
     <h4 class="modal-title" id="myModalLabel">
-        Pose editor - {{id}}
+    Pose editor - {{id}}
     </h4>
-</div>
+    </div>
 
-<!-- Modal Body -->
-<div class="modal-body">
+    <!-- Modal Body -->
+    <div class="modal-body">
     <form role="form" id="editPoseForm">
-        <input type="text" value="{{id}}" id="id" readonly hidden/>
-        <div class="form-group row">
-            <div class="col-xs-2">
-                <label for="M1_input">M1</label>
-                <input type="number" class="form-control" id="m1" value="{{m1}}"/>
-            </div><div class="col-xs-2">
-                <label for="M2_input">M2</label>
-                <input type="number" class="form-control" id="m2" value="{{m2}}"/>
-            </div><div class="col-xs-2">
-                <label for="M2_input">M3</label>
-                <input type="number" class="form-control" id="m3" value="{{m3}}"/>
-            </div><div class="col-xs-2">
-                <label for="M2_input">M4</label>
-                <input type="number" class="form-control" id="m4" value="{{m4}}"/>
-            </div><div class="col-xs-2">
-                <label for="M2_input">M5</label>
-                <input type="number" class="form-control" id="m5" value="{{m5}}"/>
-            </div>
-        </div><!--form group -->
+    <input type="text" value="{{id}}" id="id" readonly hidden/>
+    <div class="form-group row">
+    <div class="col-xs-2">
+    <label for="M1_input">M1</label>
+    <input type="number" class="form-control" id="m1" value="{{m1}}"/>
+    </div><div class="col-xs-2">
+    <label for="M2_input">M2</label>
+    <input type="number" class="form-control" id="m2" value="{{m2}}"/>
+    </div><div class="col-xs-2">
+    <label for="M2_input">M3</label>
+    <input type="number" class="form-control" id="m3" value="{{m3}}"/>
+    </div><div class="col-xs-2">
+    <label for="M2_input">M4</label>
+    <input type="number" class="form-control" id="m4" value="{{m4}}"/>
+    </div><div class="col-xs-2">
+    <label for="M2_input">M5</label>
+    <input type="number" class="form-control" id="m5" value="{{m5}}"/>
+    </div>
+    </div><!--form group -->
     </form>             
-</div>
+    </div>
 
-<!-- Modal Footer -->
-<div class="modal-footer">
+    <!-- Modal Footer -->
+    <div class="modal-footer">
     <button type="button" class="btn btn-default"
-            data-dismiss="modal">
-        Close
+    data-dismiss="modal">
+    Close
     </button>
     <button id="saveModal" type="button" class="btn btn-primary">
-        Save changes
+    Save changes
     </button>
-</div>
+    </div>
 
 </script>

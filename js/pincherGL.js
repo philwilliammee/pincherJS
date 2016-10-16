@@ -12,14 +12,7 @@ var Pincher = function(canvasContainer){
     //console.log($(canvasContainer).width(), $(canvasContainer).height());
     var width=$(canvasContainer).width();
     var height=$( window ).height()/1.5; //$(canvasContainer).height();
-    //TWEEN
-    var userOpts	= {
-            range		: 800,
-            duration	: 2500,
-            delay		: 200,
-            easing		: 'Elastic.EaseInOut'
-    };
-    
+
     var parent = this;
     var joints={};
     var parts ={
@@ -77,6 +70,31 @@ var Pincher = function(canvasContainer){
     var light2 = new THREE.DirectionalLight( 0xFFFFDD );
     light2.position.set( 0,100,150 );
     parent.scene.add( light2 );
+    
+    //tween stuff
+    var coords = { y: 0 };
+    var shoulder = { z: 0 };
+    parent.deltaT = 3000;
+    parent.tween = new TWEEN.Tween(coords)
+            .to({ y: 1.57 }, parent.deltaT)
+            .delay(0)
+            .easing(TWEEN.Easing.Elastic.InOut)
+            .onUpdate(update)
+            .onComplete(function() { console.log("start complete"); });
+    
+    parent.tweenBack = new TWEEN.Tween(coords)
+            .to({ y: 0.1 }, parent.deltaT)
+            .delay(0)
+            .easing(TWEEN.Easing.Elastic.InOut)
+            .onUpdate(update)
+            .onComplete(function() { console.log("back complete");});
+
+    function update(){
+        parent.setShoulderRoll(coords.y);
+    }
+    //parent.tween.chain(parent.tweenBack);
+    //parent.tweenBack.chain(parent.tween);
+    //parent.tween.start();    
     
     // Load the JSON files and provide callback functions (modelToScene
     var loader = new THREE.JSONLoader();
@@ -234,8 +252,9 @@ var Pincher = function(canvasContainer){
 
      };
 
-    function animate() {
+    function animate(time) {
       requestAnimationFrame( animate );
+      TWEEN.update(time);
       //console.log(parent.radsToMotors());
       parent.controls.update();
       render();

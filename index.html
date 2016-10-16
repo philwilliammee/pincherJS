@@ -53,11 +53,12 @@ THE SOFTWARE.
                 </div><!--/row-->
             </div><!--/.col-xs-12.col-sm-9-->
             <div id="sideBarTemplate"></div>
+            <div id="runSequenceTemplate"></div>
     </div><!--/row-->
 </div><!--/.container-->
 
 <script src="build/three.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tweenjs/0.6.1/tweenjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
 <script src="js/vendor/jquery-1.11.2.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
 <!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.2.0/bootstrap-slider.js" integrity="sha256-iU9myOBXPk66sqiv2ki8Rj3dLLPrAwR695ZTwuK7CSc=" crossorigin="anonymous"></script-->
@@ -73,13 +74,15 @@ THE SOFTWARE.
 <script src="js/guiPanel.js"></script><!-- requires pincherGL -->
 <script src="js/guiPanel2.js"></script><!-- requires pincherGL -->
 <script src="js/guiPanel3.js"></script><!-- requires pincherGL -->
-<script src="js/ikEngine.js"></script>
-<script src="js/services/pincherService.js"></script>
+<script src="js/services/ikEngine.js"></script>
+<script src="js/services/pincherTween.js"></script>
+<script src="js/services/pincherService.js"></script><!-- requires pincherTween.js || pincherGL -->
 <!-- load views -->
 <script src="js/views/nav_view.js"></script>
 <script src="js/views/panel1View.js"></script>
 <script src="js/views/panel2View.js"></script>
 <script src="js/views/sideBarView.js"></script>
+<script src="js/views/runSequenceView.js"></script>
 
 <!-- render views -->
 <script src="js/main.js"></script>

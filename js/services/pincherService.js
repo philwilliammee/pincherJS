@@ -93,8 +93,8 @@ var Service = function(){
         for (i=0; i<50; i++){
             var newPose = new parent.pose();         
             parent.poses.push(newPose);
-            var testArray=[Math.floor(Math.random() * 1023) + 1, Math.floor(Math.random() * 1023) + 1  , Math.floor(Math.random() * 1023) + 1  , Math.floor(Math.random() * 1023) + 1  ]
-            parent.setPoseByID(newPose.id, testArray)
+            var testArray=[Math.floor(Math.random() * 1023) + 1, Math.floor(Math.random() * 1023) + 1  , Math.floor(Math.random() * 1023) + 1  , Math.floor(Math.random() * 1023) + 1  ];
+            parent.setPoseByID(newPose.id, testArray);
         }
     }
     buildPosetest();
@@ -137,8 +137,7 @@ var Service = function(){
        return radArray;
    };
    
-    //this should be called do IK
-    
+    //used for testing 
     inc = function(){
         var angles = parent.pincher.getAngles();
         $(angles).each(function(i){
@@ -148,87 +147,18 @@ var Service = function(){
         parent.pincher.setAngles(angles);
     };
     
-    function sequencer( iterate){
-        var sequence = 0;
-        this.iter = iterate;
-        var tid;
-        var iter = 0;
-        var nextPose;
-        var lastPose ;
-        sequencer.start = function(){ 
-            tid = setInterval(function(){
-                if (iter >= 100){
-                    var pose = parent.poses[sequence];
-                    parent.poseEditor.setActiveByID(pose.id);
-
-                    $("#sidebar").scrollTop(sequence*37);
-                    console.log(sequence);
-                    //var ax_array = [pose.m1, pose.m2, pose.m3, pose.m4];//should save angles of every pose when its made
-                    //var rads_array = parent.motorsToRads(ax_array);
-                    //console.log(JSON.stringify(rads_array));
-                    //parent.pincher.setAngles(rads_array);               
-                    if (sequence < parent.poses.length-1){
-                        sequence++;
-                    }else{
-                        
-                        sequence = 0;
-                    }
-                    iter = 0;
-                    
-                }else{//interpolate
-                    var curPose = parent.pincher.getAngles();
-                    //console.log(curPose);
-                    if (!curPose){
-                        curPose = [0,0,0,0];
-                    }
-                    var pose = parent.poses[sequence];
-                    var ax_array = [pose.m1, pose.m2, pose.m3, pose.m4];//should save angles of every pose when its made
-                    var rads_array = parent.motorsToRads(ax_array);
-                    //console.log(rads_array);
-                    var myLerp = [];
-                    for (var i=0; i<rads_array.length; i++){
-                        var l = lerp(curPose[i], rads_array[i], iter*.0008 );
-                        myLerp.push(l);
-                    }
-                    //console.log(myLerp);
-                    if (myLerp.length > 2){
-                        parent.pincher.setAngles(myLerp);    
-                    }
-                    iter++;
-                    
-                }
-            }, 100);
-        };
-        sequencer.stop = function() { // to be called when you want to stop the timer
-          clearInterval(tid);
-        };
-    };     
+    //@todo encapsulate this in its own function
+    this.timeDelta = 5000; //ms
+    sequencer( this );
     
-    sequences = function(){
-        //var angles = parent.pincher.getAngles();
-        $(parent.poses).each(function(i, pose){
-            pose.active="active";
-            var ax_array = [pose.m1, pose.m2, pose.m3, pose.m4];//should save angles of every pose when its made
-            
-            parent.poseEditor.setActiveByID(pose.id);//initialized in sideBarView
-            //@TODO FIX it not convert here
-            var rads_array = parent.motorsToRads(ax_array);
-            console.log(JSON.stringify(rads_array));
-            parent.pincher.setAngles(rads_array);
-            pose.active="";
-        });
-
-        //parent.pincher.setAngles(angles);
-    }; 
-    
-    this.timeDelta = 1000;
-    sequencer(this.timeDelta);
     this.playSequence = function(){
-        sequencer.start();
+        //sequencer.start();
+        parent.tween.start();  
     };
 
     this.stopSequence = function(){
-        sequencer.stop(); //or do not: parent.pincher.setAngles(angles);
+        //sequencer.stop();
+        parent.tween.stop();  
     };   
     
 };
