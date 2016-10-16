@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+//good examples https://stemkoski.github.io/Three.js/index.html
 
 function old_sequencer( iterate){
     var sequence = 0;
@@ -61,3 +62,42 @@ function old_sequencer( iterate){
     };
 };    
 
+    this.test = function(){
+           if( joints.shoulder && joints.elbow && joints.wrist && joints.gripper && joints.LG && joints.RG ){
+            parent.incShoulderRot( .002 );       
+            parent.incShoulder( .002 );
+            parent.incElbow( -.002 );
+            parent.incWrist( .002 );
+            incGripper ( .2 ); 
+        }
+    };
+    
+//cuurently unused changed this to TWEEN JS
+//linear inerpolation aka LERP
+var iterator = function(callback, iterate){
+    this.iter = iterate;
+    var tid;
+    this.start = function(){ 
+        tid = setInterval(callback, this.iter);
+    };
+    this.stop = function() { // to be called when you want to stop the timer
+      clearInterval(tid);
+    };
+};
+
+//currently unused linear interpolation replaced by tween
+var lerp = function (value1, value2, amount) {
+	amount = amount < 0 ? 0 : amount;
+	amount = amount > 1 ? 1 : amount;
+	return value1 + (value2 - value1) * amount;
+};     
+
+    //used for testing 
+    inc = function(){
+        var angles = parent.pincher.getAngles();
+        $(angles).each(function(i){
+            angles[i] += .002;
+        });
+        angles[2] += -.004;
+        parent.pincher.setAngles(angles);
+    };

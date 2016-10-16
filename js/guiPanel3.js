@@ -1,13 +1,16 @@
 /*! guiPanel3 - v0.0.1 - (c) 2016 Phil Williammee - licensed MIT */
 
-/* global TP, dat */
+/* global dat */
+// requires dat.GUI
 
+// Radian angle controller GUI
+// similaiar to motors controller
+// except it uses rotation of axis in radians
 radsGUI = function(service){
     var r = service.pincher;
     
     this.gui = new dat.GUI();
-    
-    //var this.gui = this.gui.addFolder('Move Axis');
+    //define parameters
     var parameters = {
             angle1: 471, angle2: 157, angle3: 0, angle4: 0, angle5:0
     };    
@@ -19,7 +22,7 @@ radsGUI = function(service){
 
     m1.onChange(function(value){   
         r.setShoulderRoll(value/100.0); 
-       var ax_array = service.radsToMotors();
+        var ax_array = service.radsToMotors();
         service.modifyActivePose(ax_array);//if a pose is selected update it
     });
     m2.onChange(function(value){   
@@ -37,6 +40,8 @@ radsGUI = function(service){
        var ax_array = service.radsToMotors();
         service.modifyActivePose(ax_array);//if a pose is selected update it        
     });
+    
+    //@TODO add grippers functionality
     m5.onChange(function(value){   
         
     }); 

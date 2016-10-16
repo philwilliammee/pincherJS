@@ -1,13 +1,13 @@
 /*! guiPanel2 - v0.0.1 - (c) 2016 Phil Williammee - licensed MIT */
 
-/* global TP, dat */
+/* global dat */
+// requires dat.GUI
 
+//Motors GUI updates the pincher arm based on ax servo motor positioning 0-1024
 ax_GUI = function(service){
-    var r = service.pincher;
-    var TP = service.TP;
     
     this.gui = new dat.GUI();
-    //var this.gui = this.gui.addFolder('Move Motors');
+    
     var parameters = {
             m1: 512, m2: 512, m3: 512, m4: 512, m5:0
     };    
@@ -17,7 +17,9 @@ ax_GUI = function(service){
     var m4 = this.gui.add( parameters, 'm4' ).min(0).max(1024).step(1).listen();
     var m5 = this.gui.add( parameters, 'm5' ).min(0).max(1024).step(1).listen();
     this.gui.open();    
-    //these must convert motor positions to angles in rads
+    
+    //on slider change updates the selected pose and 
+    //redraws the robot with new  motorvalues
     m1.onChange(function(value){   
         var motors = getMotorSliders();
         service.modifyActivePose(motors);//if a pose is selected update it
@@ -42,14 +44,19 @@ ax_GUI = function(service){
         var rads= service.motorsToRads(motors);
         service.pincher.setAngles(rads);
     });
+    
+    //@todo update the grippers position
     m5.onChange(function(value){   
         
     }); 
     
+    //returns the current position values of the sliders
     function getMotorSliders(){
         return [parameters.m1, parameters.m2, parameters.m3, parameters.m4];
     }
     
+    //sets the slider values @TODO this should be updated 
+    //when a pose is selected the sliders should be set to that pose value
     this.setM1 = function(val){
         parameters.m1 = val;
         m1.updateDisplay();

@@ -1,7 +1,9 @@
-/* - v0.0.1 - (c) 2016 Phil Williammee - licensed MIT */
+/* runSequenceView.js- v0.0.1 - (c) 2016 Phil Williammee - licensed MIT */
 
 /* global log, TWEEN */
 
+//the runsequence panel working quite nicely
+//@todo maybe add more tweenining options for testing like timedelta etc
 var RunSequenceView = function (service) {
     this.service = service;
     var parent = this;
@@ -11,7 +13,7 @@ var RunSequenceView = function (service) {
         //play sequence buttons
         this.$el.on('click', '#button_play', buttonPlayPress);
         this.$el.on('click', '#button_stop', buttonStopPress);
-        this.$el.on('click', '#button_ffw', buttonForwardPress);
+        this.$el.on('click', '#button_fw', buttonForwardPress);
         
         //easing curve
         this.$el.on('change', '#selEasing', easingSelected);
@@ -20,22 +22,25 @@ var RunSequenceView = function (service) {
     //play Pose sequence controls
     var state = 'stop';
 
+    //currently unimplemented
     function buttonBackPress() {
         console.log("button back invoked.");
     }
-
+    //@todo this should play continuous sequences
     function buttonForwardPress() {
         console.log("button forward invoked.");
+        log.info("button continous run unimplemented.");        
     }
 
     function buttonRewindPress() {
         console.log("button rewind invoked.");
     }
-
+    
     function buttonFastforwardPress() {
         console.log("button fast forward invoked.");
     }
-
+    
+    //@todo this should only play one sequence
     function buttonPlayPress() {
         var button = $("#button_play");
         if(state==='stop'){
@@ -70,7 +75,6 @@ var RunSequenceView = function (service) {
     function easingSelected(){
         var selected = ("TWEEN.Easing."+$(this).val());
         console.log(selected);
-        //.tween
         service.tween.easing( eval(selected) );
     }
     
@@ -78,8 +82,7 @@ var RunSequenceView = function (service) {
         this.$el.html(this.template());//static element
         return this;
     };
-    
-    
+   
     this.initialize();
   
 };

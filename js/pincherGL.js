@@ -1,19 +1,17 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/*! pincherGL - v0.0.1 - (c) 2016 Phil Williammee - licensed MIT */
 
-//good examples https://stemkoski.github.io/Three.js/index.html
+/* global THREE, TWEEN */
+//requires TWEEN.js THREE.js and pincher arm components.JSON
 
-/* global THREE */
-
+//canvasContainer is the dom to render canvas in
+//pincher renders the object on the screen and add setters and getters
+//@TODO fix lighting
 var Pincher = function(canvasContainer){
-    //console.log($(canvasContainer).width(), $(canvasContainer).height());
     var width=$(canvasContainer).width();
     var height=$( window ).height()/1.5; //$(canvasContainer).height();
 
     var parent = this;
+    //parts and joints names should be swaped for clarity parts are really joints
     var joints={};
     var parts ={
         b: new THREE.Object3D(),
@@ -22,153 +20,129 @@ var Pincher = function(canvasContainer){
         e: new THREE.Object3D(),
         w: new THREE.Object3D()
     };
+    //set up linkeage
     parts.b.add(parts.sRoll);
     parts.sRoll.add(parts.s);
     parts.s.add(parts.e);
     parts.e.add(parts.w);
-
+    
+    //probably can encapsulate thes in function as var
     this.renderer; 
     this.scene; 
     this.camera; 
     this.controls;
-    this.doTest = false;
-    //this.gui = new dat.GUI();
- function init(){
-    parent.renderer = new THREE.WebGLRenderer( { antialias: false  } );
-    parent.scene = new THREE.Scene();
-    parent.scene.fog = new THREE.FogExp2( 0xcccccc, 0.001 );
     
-    // H E L P E R S  --//
-    var gridHelper = new THREE.GridHelper(400, 50);
-    gridHelper.position.set( 0,-128,0 );
+    //initialize the canvas
+    function init(){
+       parent.renderer = new THREE.WebGLRenderer( { antialias: false  } );
+       parent.scene = new THREE.Scene();
+       parent.scene.fog = new THREE.FogExp2( 0xcccccc, 0.001 );
+
+       // H E L P E R S  --//
+       var gridHelper = new THREE.GridHelper(400, 50);
+       gridHelper.position.set( 0,-128,0 );
+
+       var axes = new THREE.AxisHelper(250);
+       axes.position.set(0,-128,0);
+       parent.scene.add(axes);
+
+       parent.scene.add( gridHelper );
+       parent.camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);  
+       parent.camera.position.z = 230;
+       parent.camera.position.x = 0;
+       parent.camera.position.y = 0;   
+
+       parent.controls = new THREE.OrbitControls( parent.camera, parent.renderer.domElement );
+       parent.controls.addEventListener( 'change', render );    
+
+       // Setup the parent.renderer
+       parent.renderer.setClearColor( parent.scene.fog.color, 1 );
+       parent.renderer.setSize( width, height );
+
+       // Add the lights
+       var ambientLight = new THREE.AmbientLight(0xffffdd, .65);
+       parent.scene.add(ambientLight);
+
+       var light = new THREE.PointLight( 0xffffdd );
+       light.position.set( 0, 100, -150 );
+       parent.scene.add( light );
+
+       var light2 = new THREE.DirectionalLight( 0xFFFFDD );
+       light2.position.set( 0,100,150 );
+       parent.scene.add( light2 );
+
+       // Load the JSON files and provide callback functions (modelToScene
+       var loader = new THREE.JSONLoader();
+       loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p2.json", createShoulder );
+       loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p1.json", createBase );
+       loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p3.json", createBicep );
+       loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p4.json", createWrist );
+       loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p5.json", createGripper );
+       loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/pRail.json", createGrail );
+       loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/pGR.json", createRG );
+       loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/pGL.json", createLG );
+
+        // After loading JSON OBJ add it to the scene
+        // add the part to the joint
+       function createBase( geometry, materials ) {
+         var material = new THREE.MeshFaceMaterial(materials);
+         joints.base = new THREE.Mesh( geometry, material );
+         parts.b.add(joints.base);
+         parent.scene.add( parts.b );
+     }       
+       function createShoulder( geometry, materials ) {
+         var material = new THREE.MeshFaceMaterial(materials);
+         joints.shoulder = new THREE.Mesh( geometry, material );
+         parts.sRoll.add(joints.shoulder);
+         //scene.add( joints.shoulder );
+         parent.scene.add(parts.sRoll);
+       }
+
+       function createBicep( geometry, materials ) {
+         var material = new THREE.MeshFaceMaterial(materials);
+         joints.elbow = new THREE.Mesh( geometry, material );
+         parts.s.add(joints.elbow);
+       }
+
+       function createWrist( geometry, materials ) {
+         var material = new THREE.MeshFaceMaterial(materials);
+         joints.wrist = new THREE.Mesh( geometry, material );
+         parts.e.add( joints.wrist );
+       }
+
+        function createGripper( geometry, materials ) {
+         var material = new THREE.MeshFaceMaterial(materials);
+         joints.gripper = new THREE.Mesh( geometry, material );
+         joints.gripper.closing = true;
+         joints.gripper.pos = 0;
+         parts.w.add(joints.gripper);
+       }
+
+       function createGrail( geometry, materials ) {
+         var material = new THREE.MeshFaceMaterial(materials);
+         joints.grail = new THREE.Mesh( geometry, material );
+         parts.w.add( joints.grail );
+       }
+
+        function createRG( geometry, materials ) {
+         var material = new THREE.MeshFaceMaterial(materials);
+         joints.RG = new THREE.Mesh( geometry, material );
+         parts.w.add( joints.RG );
+       }
+
+        function createLG( geometry, materials ) {
+         var material = new THREE.MeshFaceMaterial(materials);
+         joints.LG = new THREE.Mesh( geometry, material );
+         parts.w.add( joints.LG );   
+       }    
+    };//end of init
     
-    var axes = new THREE.AxisHelper(250);
-    axes.position.set(0,-128,0);
-    parent.scene.add(axes);
-
-    parent.scene.add( gridHelper );
-    parent.camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);  
-    parent.camera.position.z = 230;
-    parent.camera.position.x = 0;
-    parent.camera.position.y = 0;   
-    //parent.controls = new THREE.OrbitControls( parent.camera,  );
-    parent.controls = new THREE.OrbitControls( parent.camera, parent.renderer.domElement );
-    parent.controls.addEventListener( 'change', render );    
-
-    // Setup the parent.renderer
-    parent.renderer.setClearColor( parent.scene.fog.color, 1 );
-    parent.renderer.setSize( width, height );
-    
-    // Add the lights
-    var ambientLight = new THREE.AmbientLight(0xffffdd, .65);
-    parent.scene.add(ambientLight);
-    
-    var light = new THREE.PointLight( 0xffffdd );
-    light.position.set( 0, 100, -150 );
-    parent.scene.add( light );
-    
-    var light2 = new THREE.DirectionalLight( 0xFFFFDD );
-    light2.position.set( 0,100,150 );
-    parent.scene.add( light2 );
-    
-    //tween stuff
-    var coords = { y: 0 };
-    var shoulder = { z: 0 };
-    parent.deltaT = 3000;
-    parent.tween = new TWEEN.Tween(coords)
-            .to({ y: 1.57 }, parent.deltaT)
-            .delay(0)
-            .easing(TWEEN.Easing.Elastic.InOut)
-            .onUpdate(update)
-            .onComplete(function() { console.log("start complete"); });
-    
-    parent.tweenBack = new TWEEN.Tween(coords)
-            .to({ y: 0.1 }, parent.deltaT)
-            .delay(0)
-            .easing(TWEEN.Easing.Elastic.InOut)
-            .onUpdate(update)
-            .onComplete(function() { console.log("back complete");});
-
-    function update(){
-        parent.setShoulderRoll(coords.y);
-    }
-    //parent.tween.chain(parent.tweenBack);
-    //parent.tweenBack.chain(parent.tween);
-    //parent.tween.start();    
-    
-    // Load the JSON files and provide callback functions (modelToScene
-    var loader = new THREE.JSONLoader();
-    loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p2.json", createShoulder );
-    loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p1.json", createBase );
-    loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p3.json", createBicep );
-    loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p4.json", createWrist );
-    loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p5.json", createGripper );
-    loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/pRail.json", createGrail );
-    loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/pGR.json", createRG );
-    loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/pGL.json", createLG );
-    
-     // After loading JSON OBJ add it to the scene
-    function createBase( geometry, materials ) {
-      var material = new THREE.MeshFaceMaterial(materials);
-      joints.base = new THREE.Mesh( geometry, material );
-      parts.b.add(joints.base);
-      //scene.add( joints.base );
-      parent.scene.add( parts.b );
-  }       
-    function createShoulder( geometry, materials ) {
-      var material = new THREE.MeshFaceMaterial(materials);
-      joints.shoulder = new THREE.Mesh( geometry, material );
-      parts.sRoll.add(joints.shoulder);
-      //scene.add( joints.shoulder );
-      parent.scene.add(parts.sRoll);
-    }
-
-    function createBicep( geometry, materials ) {
-      var material = new THREE.MeshFaceMaterial(materials);
-      joints.elbow = new THREE.Mesh( geometry, material );
-      parts.s.add(joints.elbow);
-      //joints.shoulder.add(joints.elbow);
-    }
-
-    function createWrist( geometry, materials ) {
-      var material = new THREE.MeshFaceMaterial(materials);
-      joints.wrist = new THREE.Mesh( geometry, material );
-      //joints.elbow.add(joints.wrist);
-      parts.e.add( joints.wrist );
-    }
-
-     function createGripper( geometry, materials ) {
-      var material = new THREE.MeshFaceMaterial(materials);
-      joints.gripper = new THREE.Mesh( geometry, material );
-      joints.gripper.closing = true;
-      joints.gripper.pos = 0;
-      parts.w.add(joints.gripper);
-    }
-
-    function createGrail( geometry, materials ) {
-      var material = new THREE.MeshFaceMaterial(materials);
-      joints.grail = new THREE.Mesh( geometry, material );
-      parts.w.add( joints.grail );
-    }
-
-     function createRG( geometry, materials ) {
-      var material = new THREE.MeshFaceMaterial(materials);
-      joints.RG = new THREE.Mesh( geometry, material );
-      parts.w.add( joints.RG );
-    }
-
-     function createLG( geometry, materials ) {
-      var material = new THREE.MeshFaceMaterial(materials);
-      joints.LG = new THREE.Mesh( geometry, material );
-      parts.w.add( joints.LG );   
-    }    
- };
- 
-  this.setShoulderRoll =function( rad ){
-    parts.sRoll.rotation.y = rad;
+    //angle setters
+    this.setShoulderRoll =function( rad ){
+        parts.sRoll.rotation.y = rad;
     };
 
-     this.setShoulder =function( rad ){
+    this.setShoulder =function( rad ){
         parts.s.rotation.z = rad;
     };
 
@@ -193,7 +167,8 @@ var Pincher = function(canvasContainer){
         //need to convert degrees into distance
         joints.RG.position.z = -joints.gripper.pos;   
     }
-
+    
+    //angle incrementers NOT USED they can be removed
     this.incShoulderRoll = function( rad ){
         parts.sRoll.rotation.y += rad;
     }; 
@@ -213,7 +188,9 @@ var Pincher = function(canvasContainer){
         parts.w.rotation.z += rad;
         parts.w.translateX( -213.2  );    
     };
-
+    
+    //@TODO create the proper function to convert radians into gripper distance
+    //look at pyPincher2 for calculations
     function incGripper( rad ){
         if (joints.gripper.closing){
             joints.gripper.pos -= rad;
@@ -230,18 +207,16 @@ var Pincher = function(canvasContainer){
         joints.LG.position.z = +joints.gripper.pos;
         joints.RG.position.z = -joints.gripper.pos;
     }
-
-     var render = function () {
-       parent.renderer.render(parent.scene, parent.camera);
-     };
-
+    
+    //sets the joint angles by an array
      this.setAngles = function(rads){
          this.setShoulderRoll(rads[0]);
          this.setShoulder(rads[1]);
          this.setElbow(rads[2]);
          this.setWrist(rads[3]);
      };
-
+     
+     //returns an array of the current angles
      this.getAngles =function(){
          return [ 
             parts.sRoll.rotation.y,
@@ -251,33 +226,28 @@ var Pincher = function(canvasContainer){
          ];
 
      };
-
+     
+     var render = function () {
+       parent.renderer.render(parent.scene, parent.camera);
+     };     
+     
+     //update canvas
     function animate(time) {
       requestAnimationFrame( animate );
       TWEEN.update(time);
-      //console.log(parent.radsToMotors());
       parent.controls.update();
       render();
     }
-
-    this.test = function(){
-           if( joints.shoulder && joints.elbow && joints.wrist && joints.gripper && joints.LG && joints.RG ){
-            parent.incShoulderRot( .002 );       
-            parent.incShoulder( .002 );
-            parent.incElbow( -.002 );
-            parent.incWrist( .002 );
-            incGripper ( .2 ); 
-        }
-    };
-
+    
+    //when the widow is resized update and render the canvas
     $( window ).resize(function(){
-        console.log("resized window");
+        //console.log("resized window");
         width=$(canvasContainer).width();
-        height= $( window ).height()/1.5;
-      parent.camera.aspect = width / height;
-      parent.camera.updateProjectionMatrix();
-      parent.renderer.setSize( width, height );
-      render();
+        height= $( window ).height()/1.5;//keeps the window 66% of VH to if jumbotron css changes change this also
+        parent.camera.aspect = width / height;
+        parent.camera.updateProjectionMatrix();
+        parent.renderer.setSize( width, height );
+        render();
     });
 
      init();

@@ -1,11 +1,9 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/*! panel2View - v0.0.1 - (c) 2016 Phil Williammee - licensed MIT */
 
 /* global log */
 
+//panel2 events this needs much more backend work
+// this is basically a placeholder for backend functions to control the physical pincher
 var Panel2View = function(service){
     this.initialize = function () {
         this.$el = $('<div/>');

@@ -21,3 +21,19 @@ sequences = function(){
 
     //parent.pincher.setAngles(angles);
 }; 
+
+    //this should be called do IK
+    function animateTest(){
+        inc = function(){
+            var angles = service.pincher.getAngles();
+            $(angles).each(function(i){
+                angles[i] += .002;
+            });
+            angles[2] += -.004;
+            if (service.pincher.doTest){
+                service.pincher.setAngles(angles);
+            }
+        };
+        var iter = new iterator(inc, 10);
+        iter.start();
+    } 

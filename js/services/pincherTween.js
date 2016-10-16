@@ -1,12 +1,12 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/*! pincherTween.js - v0.0.1 - (c) 2016 Phil Williammee - licensed MIT */
 
 
-/* global TWEEN, log, Infinity */
+/* global TWEEN, log */
 
+//the sequencer animates the object for positions between the pose editor
+// this should also be able to eventually output a command to the robot after n TWEEN.iterations
+// or just at each pose iteration
+// this needs a lot of clean up
 function sequencer( service ){
     var sequence = 0;
     var rads_array = [0,0,0,0];

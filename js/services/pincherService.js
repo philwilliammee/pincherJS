@@ -1,5 +1,9 @@
 /*! pincherService.js - v0.0.1 - (c) 2016 Phil Williammee - licensed MIT */
 
+//service function the main location for exchanging data between functions
+//all setters and getters for all data objects should be in a service except dom objects
+//@todo clean up organize and encapsulate also TP, Pose, and other functions should be more complete
+// add some safety limits options
 var Service = function(){
     var parent = this;
     this.poses = [];
@@ -8,7 +12,6 @@ var Service = function(){
     this.init = function(canvasContainer){
         var deffered = new $.Deferred();
         this.pincher = new Pincher(canvasContainer);
-        //document.getElementById("myGUI").appendChild(gui);
         this.ik = new IK();
         //promise to return the rendered pincher dom
         deffered.resolve( this.pincher.renderer.domElement );
@@ -37,8 +40,9 @@ var Service = function(){
     };
     
     this.updateIK = function(){
+        // returns a ret object from IKEngine with e=error, 
+        // rads = than joint angles in radians
         var ret = this.ik.calc_positions( this.TP.x, this.TP.y , this.TP.z, this.GA);
-        //console.log(ret.rads, ret.e);
         if (!ret.e){
             this.pincher.setAngles(ret.rads);
         }
@@ -89,7 +93,10 @@ var Service = function(){
         } 
     };    
     
+    // generate some random poses for testing 
+    // this could be replaced by a nice algorithm
     function buildPosetest(){
+        console.log("50 random test poses are created in pose editor panel to test the sequencer, and panel functions");
         for (i=0; i<50; i++){
             var newPose = new parent.pose();         
             parent.poses.push(newPose);
@@ -99,6 +106,8 @@ var Service = function(){
     }
     buildPosetest();
     
+    //could this be moved to common? pass a rad array and return motors
+    //needs physical testing
     this.radsToMotors =function(){
        var radArray = this.pincher.getAngles();
        //should assert length of radArray here
@@ -118,6 +127,8 @@ var Service = function(){
        return ax_array;
    };
    
+   //converts motor position to radians and adds the offset
+   //needs physical testing
     this.motorsToRads =function(motorArray){
        //problem with modify active pose when running sequence
        //parent.modifyActivePose(motorArray);//if a pose is selected update it
@@ -136,28 +147,17 @@ var Service = function(){
        
        return radArray;
    };
-   
-    //used for testing 
-    inc = function(){
-        var angles = parent.pincher.getAngles();
-        $(angles).each(function(i){
-            angles[i] += .002;
-        });
-        angles[2] += -.004;
-        parent.pincher.setAngles(angles);
-    };
     
     //@todo encapsulate this in its own function
     this.timeDelta = 5000; //ms
     sequencer( this );
     
+    //start the tween sequence
     this.playSequence = function(){
-        //sequencer.start();
         parent.tween.start();  
     };
-
+    //stop the tween sequence
     this.stopSequence = function(){
-        //sequencer.stop();
         parent.tween.stop();  
     };   
     

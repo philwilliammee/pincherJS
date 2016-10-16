@@ -1,11 +1,11 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/*! ikEngine.js - v0.0.1 - (c) 2016 Phil Williammee - licensed MIT */
+// thanks to https://maquinapensante.com/2016/01/31/simplified-inverse-kinematics-model-for-a-5-degree-of-freedom-gripper-robotic-arm-2011/
+// saved on wayback machine
+//modified from pyPinher2 for 3d coordinates
 
 /* global log */
 
+//could use some wrist orbital controls
 IK = function(){
     var self = this;
     this.l12 = 0.0;                      // hypotenuse belween a1 & a3

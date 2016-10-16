@@ -1,7 +1,8 @@
-/* - v0.0.1 - (c) 2016 Phil Williammee - licensed MIT */
+/* sideBarView.js- v0.0.1 - (c) 2016 Phil Williammee - licensed MIT */
 
 /* global log, TWEEN */
 
+//handles the pose editor events
 var SideBarView = function (service) {
     this.service = service;
     var parent = this;
@@ -124,6 +125,8 @@ var SideBarView = function (service) {
   
 };
 
+// a model to edit the json objects
+//@todo add more inputs time delta ect..
 var EditPoseMdalContentView = function() {
     var poseData;
     this.render = function() {
