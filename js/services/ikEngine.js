@@ -6,7 +6,7 @@
 /* global log */
 
 //could use some wrist orbital controls
-IK = function(){
+var IK = function(){
     var self = this;
     this.l12 = 0.0;                      // hypotenuse belween a1 & a3
     this.a12 = 0.0;                      // inscribed angle between hypotenuse, w 
@@ -92,6 +92,31 @@ IK = function(){
         
         return  {e:error, rads: self.a} ;
     };
+    
+    this.rads_2_TP = function(angles){//angles in radians
+        //mod_angles = [a%360 for a in deg_angles]
+        //angles = np.deg2rad(mod_angles) 
+        console.log(angles);
+        var error = false;
+        var gripper_angle = (angles[1]+angles[2]+angles[3]);
+        //print "gripper angle", gripper_angle, "=",angles[1],angles[2],angles[3]
+        var l12 = Math.sqrt((self.l[1]*self.l[1])+(self.l[2]*self.l[2]) -(2*self.l[1]*self.l[2]*Math.cos(Math.PI-angles[2])));
+        console.log(l12);
+        //law of cosines to find second angle sigma
+        var sigma = Math.acos(((self.l[1]*self.l[1])+(l12*l12) -(self.l[2]*self.l[2])) / (2*self.l[1]*l12));
+        var a12 = angles[1]-sigma;
+        var w2 = l12*Math.cos(a12);
+        var z2 = l12*Math.sin(a12);
+        var wt = (self.l[3]*Math.cos(gripper_angle))+w2;
+        var zt = (self.l[3]*Math.sin(gripper_angle))+z2;
+        var xt = wt*Math.cos(angles[0]);
+        var yt = wt*Math.sin(angles[0]);
+        var tp = [xt,yt, zt, gripper_angle ];
+        console.log(tp);
+        if (!xt || !yt || !zt){
+            error = true;
+        }
+        return {e:error, tp:tp };
+    };    
 
 };
-

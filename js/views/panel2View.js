@@ -8,6 +8,7 @@ var Panel2View = function(service){
     this.initialize = function () {
         this.$el = $('<div/>');
         this.$el.on('click', '#infoButton', logAngle);
+        this.$el.on('click', '#getTP', logTP);
     };
     
     function logAngle(){
@@ -15,6 +16,17 @@ var Panel2View = function(service){
          console.log(data);
          log.info(JSON.stringify(data));
     }
+    
+    function logTP(){
+         var TP = service.radsToTP();
+         var prettyTP = [];
+         for (var i=0; i<TP.length; i++){
+            prettyTP.push(Math.round(TP[i])); 
+            //@TODO this rtounds gripper angles fix this
+         }
+         log.info(JSON.stringify( prettyTP ));
+    }
+    
     this.initialize();  
     
     this.render = function() {

@@ -44,7 +44,9 @@ var Service = function(){
         // rads = than joint angles in radians
         var ret = this.ik.calc_positions( this.TP.x, this.TP.y , this.TP.z, this.GA);
         if (!ret.e){
-            this.pincher.setAngles(ret.rads);
+            this.pincher.setAngles(ret.rads);//should you really set angles here?
+        }else{
+            console.log(ret.e);
         }
     };
     
@@ -126,6 +128,15 @@ var Service = function(){
        //problem with modify active pose when running sequence
        return ax_array;
    };
+   
+    //could this be moved to common? pass a rad array and return motors
+    //needs physical testing
+    this.radsToTP =function(){
+       var radArray = this.pincher.getAngles();
+       //var servoDegOffset = [270, 90, 180, 180];
+        var ret = this.ik.rads_2_TP( radArray);
+       return ret.tp;
+   };   
    
    //converts motor position to radians and adds the offset
    //needs physical testing
