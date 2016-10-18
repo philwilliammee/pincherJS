@@ -93,30 +93,43 @@ var IK = function(){
         return  {e:error, rads: self.a} ;
     };
     
-    this.rads_2_TP = function(angles){//angles in radians
-        //mod_angles = [a%360 for a in deg_angles]
-        //angles = np.deg2rad(mod_angles) 
-        console.log(angles);
+    this.rads_2_TP = function(angles){
         var error = false;
-        var gripper_angle = (angles[1]+angles[2]+angles[3]);
-        //print "gripper angle", gripper_angle, "=",angles[1],angles[2],angles[3]
-        var l12 = Math.sqrt((self.l[1]*self.l[1])+(self.l[2]*self.l[2]) -(2*self.l[1]*self.l[2]*Math.cos(Math.PI-angles[2])));
-        console.log(l12);
-        //law of cosines to find second angle sigma
-        var sigma = Math.acos(((self.l[1]*self.l[1])+(l12*l12) -(self.l[2]*self.l[2])) / (2*self.l[1]*l12));
-        var a12 = angles[1]-sigma;
-        var w2 = l12*Math.cos(a12);
-        var z2 = l12*Math.sin(a12);
-        var wt = (self.l[3]*Math.cos(gripper_angle))+w2;
-        var zt = (self.l[3]*Math.sin(gripper_angle))+z2;
-        var xt = wt*Math.cos(angles[0]);
-        var yt = wt*Math.sin(angles[0]);
-        var tp = [xt,yt, zt, gripper_angle ];
-        console.log(tp);
-        if (!xt || !yt || !zt){
-            error = true;
-        }
-        return {e:error, tp:tp };
-    };    
+        var gripper_angle = (angles[1]+angles[2]+angles[3]) %(2*Math.PI);
+        var links = self.FK(angles);
+        var tp = [links.xs.last(), links.ys.last(), links.zs.last(), gripper_angle];
+        return {e:error, tp:tp }; 
+    };
+    
+    //forward kinematics
+    // returns the location of each joint position 
+    // accepts angles in radians return dictionary of arrays
+    this.FK = function(angles){
+            var last_a = 0;
+            var sum_real = 0;
+            var sum_img = 0;
+            var x=[], y=[], z = [];
+            var a0 = angles.shift();
+            angles.unshift(0);
+            var links = self.l;
+            var adja= [];
+            //walk the links
+            for (var i=0; i<angles.length; i++){
+                var l = links[i];
+                var ca = angles[i];
+                a = ca + last_a ;
+                ra = a;//Math.radians(a);
+                sum_real += l*Math.cos(ra);
+                sum_img += l*Math.sin(ra);
+                x.push(sum_real*Math.cos(a0));
+                y.push(sum_real*Math.sin(a0));
+                z.push(sum_img);
+                adja.push(a);
+                last_a = a;
+            }
+            //print 'Tool_point', x[-1],y[-1],z[-1]
+            return {xs:x, ys:y,zs:z};
+            
+        };
 
 };

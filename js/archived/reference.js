@@ -62,42 +62,79 @@ function old_sequencer( iterate){
     };
 };    
 
-    this.test = function(){
-           if( joints.shoulder && joints.elbow && joints.wrist && joints.gripper && joints.LG && joints.RG ){
-            parent.incShoulderRot( .002 );       
-            parent.incShoulder( .002 );
-            parent.incElbow( -.002 );
-            parent.incWrist( .002 );
-            incGripper ( .2 ); 
-        }
-    };
-    
+this.test = function(){
+       if( joints.shoulder && joints.elbow && joints.wrist && joints.gripper && joints.LG && joints.RG ){
+        parent.incShoulderRot( .002 );       
+        parent.incShoulder( .002 );
+        parent.incElbow( -.002 );
+        parent.incWrist( .002 );
+        incGripper ( .2 ); 
+    }
+};
+
 //cuurently unused changed this to TWEEN JS
 //linear inerpolation aka LERP
 var iterator = function(callback, iterate){
-    this.iter = iterate;
-    var tid;
-    this.start = function(){ 
-        tid = setInterval(callback, this.iter);
-    };
-    this.stop = function() { // to be called when you want to stop the timer
-      clearInterval(tid);
-    };
+this.iter = iterate;
+var tid;
+this.start = function(){ 
+    tid = setInterval(callback, this.iter);
+};
+this.stop = function() { // to be called when you want to stop the timer
+  clearInterval(tid);
+};
 };
 
 //currently unused linear interpolation replaced by tween
 var lerp = function (value1, value2, amount) {
-	amount = amount < 0 ? 0 : amount;
-	amount = amount > 1 ? 1 : amount;
-	return value1 + (value2 - value1) * amount;
+    amount = amount < 0 ? 0 : amount;
+    amount = amount > 1 ? 1 : amount;
+    return value1 + (value2 - value1) * amount;
 };     
 
-    //used for testing 
-    inc = function(){
-        var angles = parent.pincher.getAngles();
-        $(angles).each(function(i){
-            angles[i] += .002;
-        });
-        angles[2] += -.004;
-        parent.pincher.setAngles(angles);
-    };
+//used for testing 
+inc = function(){
+    var angles = parent.pincher.getAngles();
+    $(angles).each(function(i){
+        angles[i] += .002;
+    });
+    angles[2] += -.004;
+    parent.pincher.setAngles(angles);
+};
+
+  this.old_rads_2_TP = function(angles){//angles in radians
+    //mod_angles = [a%360 for a in deg_angles]
+    //angles = np.deg2rad(mod_angles) 
+    for (var i=0; i<angles.length; i++){
+        angles[i] = angles[i]%(Math.PI*2);
+    }
+
+    //there is a problem, sometimes angles are in wrong quadrant
+
+    var error = false;
+    var gripper_angle = (angles[1]+angles[2]+angles[3])%(Math.PI*2);
+
+    //print "gripper angle", gripper_angle, "=",angles[1],angles[2],angles[3]
+    var l12 = Math.sqrt((self.l[1]*self.l[1]) + (self.l[2]*self.l[2]) -
+            ( 2*self.l[1] * self.l[2] * Math.cos(Math.PI-angles[2])));
+    //law of cosines to find second angle sigma
+    var sigma = Math.acos((Math.pow(self.l[1],2)+(l12*l12) -
+            (self.l[2]*self.l[2])) / (2*self.l[1]*l12));
+    var a12 = angles[1]-sigma;
+
+    var w2 = l12*Math.cos(a12);//good
+    var z2 = l12*Math.sin(a12);
+    var wt = (self.l[3]*Math.cos(gripper_angle))+w2;
+    var zt = (self.l[3]*Math.sin(gripper_angle))+z2;
+    var xt = wt*Math.cos(angles[0]);
+    var yt = wt*Math.sin(angles[0]);
+    var tp = [xt,yt, zt, gripper_angle ];
+    if (!xt || !yt || !zt){
+        error = true;
+        console.log("error in rads to TP");
+    }
+    var test = this.forward_kin(angles);
+    console.log(test[0].last(), test[1].last(), test[2].last());
+    console.log(tp);
+    return {e:error, tp:tp };
+};  

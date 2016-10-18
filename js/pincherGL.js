@@ -134,7 +134,12 @@ var Pincher = function(canvasContainer){
          var material = new THREE.MeshFaceMaterial(materials);
          joints.LG = new THREE.Mesh( geometry, material );
          parts.w.add( joints.LG );   
-       }    
+       }   
+       
+        //var material = new THREE.MeshLambertMaterial( { map: "", side: THREE.DoubleSide } );
+        parent.toolPoint = new THREE.Mesh( new THREE.SphereGeometry( 10, 10, 10 ) );
+        parent.toolPoint.position.set( 0, 0, 323 );
+        parent.scene.add( parent.toolPoint );       
     };//end of init
     
     //angle setters

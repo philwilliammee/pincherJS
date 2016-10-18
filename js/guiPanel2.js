@@ -1,66 +1,77 @@
 /*! guiPanel2 - v0.0.1 - (c) 2016 Phil Williammee - licensed MIT */
 
-/* global dat */
+/* global dat, log */
 // requires dat.GUI
 
 //Motors GUI updates the pincher arm based on ax servo motor positioning 0-1024
-ax_GUI = function(service){
-    
+ax_GUI = function (service) {
+    var self = this;
     this.gui = new dat.GUI();
-    
+
     var parameters = {
-            m1: 512, m2: 512, m3: 512, m4: 512, m5:0
-    };    
-    var m1 = this.gui.add( parameters, 'm1' ).min(0).max(1024).step(1).listen();
-    var m2 = this.gui.add( parameters, 'm2' ).min(0).max(1024).step(1).listen();
-    var m3 = this.gui.add( parameters, 'm3' ).min(0).max(1024).step(1).listen();
-    var m4 = this.gui.add( parameters, 'm4' ).min(0).max(1024).step(1).listen();
-    var m5 = this.gui.add( parameters, 'm5' ).min(0).max(1024).step(1).listen();
-    this.gui.open();    
-    
+        m1: 512, m2: 512, m3: 512, m4: 512, m5: 0
+    };
+    var m1 = this.gui.add(parameters, 'm1').min(0).max(1024).step(1).listen();
+    var m2 = this.gui.add(parameters, 'm2').min(0).max(1024).step(1).listen();
+    var m3 = this.gui.add(parameters, 'm3').min(0).max(1024).step(1).listen();
+    var m4 = this.gui.add(parameters, 'm4').min(0).max(1024).step(1).listen();
+    var m5 = this.gui.add(parameters, 'm5').min(0).max(1024).step(1).listen();
+    this.gui.open();
+
     //on slider change updates the selected pose and 
     //redraws the robot with new  motorvalues
-    m1.onChange(function(value){   
-        var motors = getMotorSliders();
-        service.modifyActivePose(motors);//if a pose is selected update it
-        var rads= service.motorsToRads(motors);
-        service.pincher.setAngles(rads);
+    m1.onChange(function (value) {
+        poseWorker();
     });
-    m2.onChange(function(value){   
-        var motors = getMotorSliders();
-        service.modifyActivePose(motors);//if a pose is selected update it
-        var rads= service.motorsToRads(motors);
-        service.pincher.setAngles(rads);
+    m2.onChange(function (value) {
+        poseWorker();
     });
-    m3.onChange(function(value){   
-        var motors = getMotorSliders();
-        service.modifyActivePose(motors);//if a pose is selected update it
-        var rads= service.motorsToRads(motors);
-        service.pincher.setAngles(rads); 
+    m3.onChange(function (value) {
+        poseWorker();
     });
-    m4.onChange(function(value){   
-        var motors = getMotorSliders();
-        service.modifyActivePose(motors);//if a pose is selected update it
-        var rads= service.motorsToRads(motors);
-        service.pincher.setAngles(rads);
+    m4.onChange(function (value) {
+        poseWorker();
     });
-    
+
     //@todo update the grippers position
-    m5.onChange(function(value){   
-        
-    }); 
+    m5.onChange(function (value) {
+
+    });
     
-    //returns the current position values of the sliders
-    function getMotorSliders(){
-        return [parameters.m1, parameters.m2, parameters.m3, parameters.m4];
+    function poseWorker(){
+        //get the slider positions
+        var motors = self.getMotorSliders();
+        //update the pose with all values
+        var updatedPose = service.modifyActivePose(motors);//if a pose is selected update it may want to change this to typical getpose by ID
+        if (updatedPose){
+            var rads = [updatedPose.rad1, updatedPose.rad2, updatedPose.rad3, updatedPose.rad4, updatedPose.rad5 ];
+            service.pincher.setAngles( rads );
+            //get the toolpint of the grippers
+            var tp = [updatedPose.tpX, updatedPose.tpY, updatedPose.tpZ];
+            //update the ball for testing
+            service.pincher.toolPoint.position.set( tp[0], tp[2], -tp[1] );    
+        }else{
+            log.warning("Please select a pose");
+        }
     }
-    
+
+    //returns the current position values of the sliders
+    this.getMotorSliders = function () {
+        //convert motor sliders to TP and draw ball
+        return [parameters.m1, parameters.m2, parameters.m3, parameters.m4];
+    };
+
     //sets the slider values @TODO this should be updated 
     //when a pose is selected the sliders should be set to that pose value
-    this.setM1 = function(val){
-        parameters.m1 = val;
-        m1.updateDisplay();
+    this.setMotorSliders = function (slider_array) {
+        parameters.m1 = slider_array[0];
+        parameters.m2 = slider_array[1];
+        parameters.m3 = slider_array[2];
+        parameters.m4 = slider_array[3];
+        parameters.m5 = slider_array[4];
+        self.gui.updateDisplay();
+        //m1.updateDisplay();
     };
-    
-    this.gui.open();    
+
+    this.gui.open();
 };

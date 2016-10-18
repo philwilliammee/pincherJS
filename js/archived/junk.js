@@ -37,3 +37,43 @@ sequences = function(){
         var iter = new iterator(inc, 10);
         iter.start();
     } 
+    
+        this.oldSetPoseByID = function(poseID, ax_array){
+        if (poseID){
+            parent.poses[poseID].m1 = parseInt(ax_array[0]);
+            parent.poses[poseID].m2 = parseInt(ax_array[1]);
+            parent.poses[poseID].m3 = parseInt(ax_array[2]);
+            parent.poses[poseID].m4 = parseInt(ax_array[3]);
+        } 
+    };  
+    
+    /**
+    parent.poses[poseID].m1 = parseInt(ax_array[0]);
+    parent.poses[poseID].m2 = parseInt(ax_array[1]);
+    parent.poses[poseID].m3 = parseInt(ax_array[2]);
+    parent.poses[poseID].m4 = parseInt(ax_array[3]);
+    //var rad_array = parent.pincher.getAngles();
+    var rad_array = parent.motorsToRads(ax_array);
+    parent.poses[poseID].rad1 = rad_array[0];
+    parent.poses[poseID].rad2 = rad_array[1];
+    parent.poses[poseID].rad3 = rad_array[2];
+    parent.poses[poseID].rad4 = rad_array[3];  
+    var ret = parent.ik.rads_2_TP(rad_array);
+    if (ret.e){
+        console.log("error");
+        parent.poses[poseID].error = "targeted position can not be reached";
+        parent.poses[poseID].tpX =  1;
+        parent.poses[poseID].tpY =  1;
+        parent.poses[poseID].tpZ =  1;
+        parent.poses[poseID].tpGA =  1;            
+
+    }else{
+        parent.poses[poseID].tpX =  ret.tp[0];
+        parent.poses[poseID].tpY =  ret.tp[1];
+        parent.poses[poseID].tpZ =  ret.tp[2];
+        parent.poses[poseID].tpGA =  ret.tp[3];
+    }
+    //console.log(parent.poses[poseID]);
+    parent.poseEditor.render();
+    return parent.poses[poseID];
+    **/    

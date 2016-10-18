@@ -31,6 +31,10 @@ function sequencer( service ){
             .onComplete(function() { 
                 //get the next sequence and run it
                 var pose = service.poses[sequence];
+                //testing
+                //console.log(pose.tpX +" "+pose.tpY +" "+pose.tpZ);
+                service.pincher.toolPoint.position.set(pose.tpX, pose.tpZ, -pose.tpY);
+                
                 var ax_array = [pose.m1, pose.m2, pose.m3, pose.m4];//should save angles of every pose when its made
                 rads_array = service.motorsToRads(ax_array);//this could be rounded
                 if (pose && service.poseEditor){

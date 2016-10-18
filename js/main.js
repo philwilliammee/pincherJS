@@ -22,6 +22,12 @@
             SideBarView.prototype.template = Handlebars.compile($("#sideBar-tpl").html());
             EditPoseMdalContentView.prototype.template = Handlebars.compile($("#editPoseModal-tpl").html());
             $("#sideBarTemplate").html(new SideBarView(service).render().$el);
+            // test the pose editor
+            if (service.pincher){
+                service.buildPosetest();
+            }else{
+                console.log("Pincher arm not initialized");
+            }               
         });  
         
         $("#runSequenceTemplate").load("./templates/runSequencePanel.html", function(tmpl){
@@ -34,18 +40,18 @@
             $("#panel1Template").html(new GUI_View(service).render().$el);
             //@ todo render GUI inside panel1View 
             //build and attach the IK controller GUI
-            this.gui = new GUI(service);
-            this.gui.gui.domElement.id = "gui";
+            service.gui = new GUI(service);
+            service.gui.gui.domElement.id = "gui";
             $("#gui").addClass("gui");
             $("#gui").detach().appendTo("#kinematicsGUI");  
             //build and attach the Motors controller GUI 
-            this.ax_gui = new ax_GUI(service);
-            this.ax_gui.gui.domElement.id = "ax_gui";
+            service.ax_gui = new ax_GUI(service);
+            service.ax_gui.gui.domElement.id = "ax_gui";
             $("#ax_gui").addClass("gui");
             $("#ax_gui").detach().appendTo("#motorsGUI");    
             //build and attach the Radian controller GUI
-            this.rads_gui = new radsGUI(service);
-            this.rads_gui.gui.domElement.id = "rads_gui";
+            service.rads_gui = new radsGUI(service);
+            service.rads_gui.gui.domElement.id = "rads_gui";
             $("#rads_gui").addClass("gui");
             $("#rads_gui").detach().appendTo("#radsGUI");   
 

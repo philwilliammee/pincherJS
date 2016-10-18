@@ -55,16 +55,41 @@ var SideBarView = function (service) {
         parent.render();
     };
     
+    //@todo this should update the GUI when it is selected or the GUI should update this pose
     this.selectRow = function(event){
+        //set the row to active
+        var myPose;
         $(this).addClass('active').siblings().removeClass('active');
         var myID = parseInt($(this).prop("id"));
         for ( var i=0; i<service.poses.length; i++){
             if (myID === service.poses[i].id){
                 service.poses[i].active = "active";
+                myPose = service.poses[i];
             }else{
                 service.poses[i].active = "";
             }
         }
+        //get the current controller
+        var ax_array = [myPose.m1, myPose.m2, myPose.m3, myPose.m4];
+        var rads_array = [myPose.rad1, myPose.rad2, myPose.rad3, myPose.rad4];
+        //var ik_array = service.ik.rads_2_TP(rads_array);
+        var ik_array = [myPose.tpX, myPose.tpY, myPose.tpZ, myPose.tpGA];
+        if ($('#gui').is(":visible")){//IK
+            //update kinematics
+            service.gui.setIkSliders(ik_array);
+        }else if($('#ax_gui').is(":visible")){//Motors
+            service.ax_gui.setMotorSliders(ax_array);
+        }else if($('#rads_gui').is(":visible")){//radians   
+            service.rads_gui.setRadsSliders(rads_array);
+        }else{
+            log.error("no GUI panels are selected");
+        }
+        service.pincher.setAngles(rads_array);
+        
+        //service.setPoseByID(myID, ax_array);
+        service.pincher.toolPoint.position.set(myPose.tpX, myPose.tpZ, -myPose.tpY);
+       
+        
         return false;
     };
     
