@@ -138,3 +138,79 @@ inc = function(){
     console.log(tp);
     return {e:error, tp:tp };
 };  
+
+// **************** F U N C T I O N S *****************
+function sprint(str) {
+    var args = [].slice.call(arguments, 1),
+        i = 0;
+    return str.replace(/%s/g, function() {
+        return args[i++];
+    });
+}
+
+function getCwid(email){
+    if (email){
+        return email.split("@")[0];
+    }
+}
+function slugify(Text){
+    //console.log(Text);
+    return Text
+        .toLowerCase()
+        .replace(/[^\w ]+/g,'')
+        .replace(/ +/g,'-')
+        ;
+} 
+
+function findLookUpByCwid(empList, cwid){
+    var deferred = $.Deferred()
+    //get the results in the first found object
+    $(empList).each(function(i, el){
+        var empEmail = el.user_validate.$b_1;
+        if (empEmail){
+            if (isIn(cwid, empEmail )){
+                deferred.resolve(el);
+                return false;
+            }
+        }
+    });
+    return deferred.promise();
+}
+
+/* usage
+ * 'The lazy {} {} over the {}'.format('lazy', 'jumped', 'foobar');
+// "The lazy dog jumped over the foobar"
+ */
+String.prototype.format = function () {
+  var i = 0, args = arguments;
+  return this.replace(/{}/g, function () {
+    return typeof args[i] !== 'undefined' ? args[i++] : '';
+  });
+};
+
+function findByCwid(empList, cwid){
+    var deferred = $.Deferred()
+    //get the results in the first found object
+    $(empList).each(function(i, el){
+        var empEmail = el.emp_email;
+        if (empEmail){
+            if (isIn(cwid, empEmail )){
+                deferred.resolve(el);
+                return false;
+            }
+        }
+    });
+    return deferred.promise();
+}
+
+function getDateTimeString() {
+    var today = new Date();
+    var tod = today.toString();
+    tod = tod.replace(" UTC+0300", "");//explorer
+    tod = tod.replace(" GMT+0300 (Arab Standard Time)", "");//firefox
+    return tod;
+}
+
+function isIn(cwidNeedle, emailHaystack){
+    return ((emailHaystack.toLowerCase().indexOf(cwidNeedle.toLowerCase())) >=0 )
+} 

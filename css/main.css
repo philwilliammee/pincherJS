@@ -11,6 +11,22 @@ body {
     background-color: #ccc;
 }
 .navbar { max-height:28px; height: 28px  }
+
+.dropdown-menu>li>span {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+}
+input[type=checkbox] {
+    position: relative;
+    top: 3px;
+    margin-right: 3px;
+}
+
 .alert {
     margin-right:10px;
     height: 28px;

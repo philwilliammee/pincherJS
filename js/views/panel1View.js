@@ -17,7 +17,7 @@ var GUI_View = function(service){
         $("#motorsGUI").hide();
         $("#kinematicsGUI").show();
         var poseID = service.poseEditor.getActive();
-        if (poseID !== null || poseID != ""){
+        if (poseID >= 0){
             var pose = service.getPoseByID(poseID);
             service.gui.setIkSliders([ pose.tpX, pose.tpY, pose.tpZ, pose.tpGA ]);
         }
@@ -29,7 +29,7 @@ var GUI_View = function(service){
         $("#kinematicsGUI").hide();
         $("#motorsGUI").show();
         var poseID = service.poseEditor.getActive();
-        if (poseID !== null || poseID != ""){
+        if (poseID >= 0){
             var pose = service.getPoseByID(poseID);
             service.ax_gui.setMotorSliders([ pose.m1, pose.m2, pose.m3, pose.m4, pose.m5 ]);    
         }
@@ -41,7 +41,7 @@ var GUI_View = function(service){
         $("#motorsGUI").hide();
         $("#radsGUI").show();
         var poseID = service.poseEditor.getActive();
-        if (poseID !== null || poseID != ""){
+        if (poseID >= 0){
             var pose = service.getPoseByID(poseID);
             service.rads_gui.setRadsSliders([ pose.rad1, pose.rad2, pose.rad3, pose.rad4, pose.rad5 ]);  
         }

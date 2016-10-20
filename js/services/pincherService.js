@@ -40,11 +40,11 @@ var Service = function(){
             m3: 512,
             m4: 512,
             m5: 512,
-            rad1:Math.PI,
-            rad2:Math.PI,
-            rad3:Math.PI,
-            rad4:Math.PI,
-            rad5:Math.PI,
+            rad1: Math.PI,
+            rad2: Math.PI,
+            rad3: Math.PI,
+            rad4: Math.PI,
+            rad5: Math.PI,
             tpX : 0,
             tpY : 0,
             tpZ : 323,   
@@ -101,7 +101,7 @@ var Service = function(){
     this.modifyActivePose = function(ax_array){
         var poseID = parent.poseEditor.getActive();//initialized in sideBarView
         //console.log(poseID);
-        if (poseID !== null || poseID != ""){
+        if (poseID >= 0){
             return parent.setPoseByID(poseID, ax_array);
         }else{
             console.log("ERROR: can not find an active pose");
@@ -110,7 +110,7 @@ var Service = function(){
 
     //this is called by MotorsGUI and rads
     this.setPoseByID = function(poseID, ax_array){
-        if (poseID !== null || poseID != ""){
+        if (poseID >= 0){
             parent.poses[poseID].m1 = parseInt(ax_array[0]);
             parent.poses[poseID].m2 = parseInt(ax_array[1]);
             parent.poses[poseID].m3 = parseInt(ax_array[2]);
@@ -139,7 +139,7 @@ var Service = function(){
     //this is called by MotorsGUI and rads
     this.setPoseByRads = function(pose, rad_array){
         //console.log(pose);
-        if (pose !== null || pose != ""){
+        if (pose){
             pose.rad1 = rad_array[0];
             pose.rad2 = rad_array[1];
             pose.rad3 = rad_array[2];
@@ -167,14 +167,20 @@ var Service = function(){
     
     // generate some random poses for testing 
     // this could be replaced by a nice algorithm
+    
     this.buildPosetest =function(){
+        var jLine = [];
         console.log("50 random test poses are created in pose editor panel to test the sequencer, and panel functions");
-        for (i=0; i<30; i++){
+        for (i=0; i<10; i++){
             var newPose = new parent.pose();         
             parent.poses.push(newPose);
             var testArray=[Math.floor(Math.random() * 1023) + 1, Math.floor(Math.random() * 1023) + 1  , Math.floor(Math.random() * 1023) + 1  , Math.floor(Math.random() * 1023) + 1  ];
-            parent.setPoseByID(newPose.id, testArray);
+            var pose = parent.setPoseByID(newPose.id, testArray);
+            jLine.push({x:pose.tpX, y:pose.tpY, z:pose.tpZ});
+            ;
            }
+           //not linear
+           parent.pincher.drawLine( jLine );
     };
     
     //could this be moved to common? pass a rad array and return motors

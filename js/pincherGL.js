@@ -136,10 +136,12 @@ var Pincher = function(canvasContainer){
          parts.w.add( joints.LG );   
        }   
        
-        //var material = new THREE.MeshLambertMaterial( { map: "", side: THREE.DoubleSide } );
-        parent.toolPoint = new THREE.Mesh( new THREE.SphereGeometry( 10, 10, 10 ) );
-        parent.toolPoint.position.set( 0, 0, 323 );
-        parent.scene.add( parent.toolPoint );       
+        var material = new THREE.MeshBasicMaterial( { color: 0x0000ff});//, wireframe: true } );
+        parent.toolPoint = new THREE.Mesh( new THREE.SphereGeometry( 10, 10, 10 ), material );
+        parent.toolPoint.position.set( 0, 323, 0 );
+        parent.scene.add( parent.toolPoint );    
+        
+        //parent.drawLine();
     };//end of init
     
     //angle setters
@@ -235,6 +237,30 @@ var Pincher = function(canvasContainer){
      var render = function () {
        parent.renderer.render(parent.scene, parent.camera);
      };     
+     
+     this.drawLine = function(jLine){//json array [{x:0,y:0,z:0},...]
+        //var jLine = [{x:-1000,y:0,z:0},{x:0,y:1000,z:0},{x:1000,y:0,z:0}];
+        var material = new THREE.LineBasicMaterial({
+            color: 0x0000ff
+        });
+        var geometry = new THREE.Geometry();
+        $(jLine).each(function(i, el){
+            geometry.vertices.push(new THREE.Vector3(el.x, el.z, -el.y));
+        });
+        parent.line = new THREE.Line(geometry, material);
+        parent.scene.add(parent.line);
+
+     };
+     
+     this.hideLine = function(){
+         parent.line.visable = false;
+     };
+     
+     this.showLine = function(){
+         parent.line.visable = true;
+     };     
+     
+     
      
      //update canvas
     function animate(time) {
