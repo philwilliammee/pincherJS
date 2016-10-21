@@ -40,7 +40,7 @@ var RunSequenceView = function (service) {
         console.log("button fast forward invoked.");
     }
     
-    //@todo this should only play one sequence
+    //@todo this should only play one sequence 
     function buttonPlayPress() {
         var button = $("#button_play");
         if(state==='stop'){

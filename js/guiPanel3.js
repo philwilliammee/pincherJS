@@ -60,6 +60,8 @@ radsGUI = function (service) {
         var updated_pose = service.setPoseByRads(pose, rad_array);
         //set the ball for testing
         service.pincher.toolPoint.position.set(updated_pose.tpX, updated_pose.tpZ, -updated_pose.tpY);  
+        
+        service.poseEditor.render();
     }
 
     this.getRadsSliders = function () {

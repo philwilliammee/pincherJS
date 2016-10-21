@@ -51,8 +51,11 @@ GUI = function(service){
             var updated_pose = service.setPoseByRads(pose, ret.rads);
             //set the ball for testing using FK
             service.pincher.toolPoint.position.set(updated_pose.tpX, updated_pose.tpZ, -updated_pose.tpY);              
-            //for comparison actual TP
-            //service.pincher.toolPoint.position.set(parameters.x, parameters.z, -parameters.y);
+            //@todo for comparison actual TP
+            
+            //update the poseditor with new data
+            service.poseEditor.render();
+            
         }else{
             console.log("targeted position can not be reached");
         }        

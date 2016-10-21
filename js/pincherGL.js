@@ -73,14 +73,14 @@ var Pincher = function(canvasContainer){
 
        // Load the JSON files and provide callback functions (modelToScene
        var loader = new THREE.JSONLoader();
-       loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p2.json", createShoulder );
-       loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p1.json", createBase );
-       loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p3.json", createBicep );
-       loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p4.json", createWrist );
-       loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/p5.json", createGripper );
-       loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/pRail.json", createGrail );
-       loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/pGR.json", createRG );
-       loader.load( "https://cdn.rawgit.com/philwilliammee/pincherJS/ebe45e2dd8b6883c9b44578575278f2a8a1756e4/obj/pGL.json", createLG );
+       loader.load( "./obj/p2.json", createShoulder );
+       loader.load( "./obj/p1.json", createBase );
+       loader.load( "./obj/p3.json", createBicep );
+       loader.load( "./obj/p4.json", createWrist );
+       loader.load( "./obj/p5.json", createGripper );
+       loader.load( "./obj/pRail.json", createGrail );
+       loader.load( "./obj/pGR.json", createRG );
+       loader.load( "./obj/pGL.json", createLG );
 
         // After loading JSON OBJ add it to the scene
         // add the part to the joint

@@ -22,13 +22,18 @@ var SideBarView = function (service) {
     
     function saveModal(){
         console.log("save modal");
-        newPose = {};
+        var np = {};
         $("form#editPoseForm :input").each(function(){
-            var input = $(this); // This is the jquery object of the input, do what you will
-            newPose[input.attr('id')] = input.val();
+            var input = $(this); 
+            np[input.attr('id')] = parseInt(input.val());
         });
         //TODO add some validation
-        service.updatePose(newPose);
+        
+        console.log(np);
+        service.setPoseByID(np.id, [np.m1, np.m2, np.m3, np.m4, np.m5]);
+        
+        //@TODO should move the robot to the active pose by setting sliders
+
         parent.render();
     }    
 

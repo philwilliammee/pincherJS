@@ -4,6 +4,7 @@
 // requires dat.GUI
 
 //Motors GUI updates the pincher arm based on ax servo motor positioning 0-1024
+//This can be removed because motors are shown in Pose Editor
 ax_GUI = function (service) {
     var self = this;
     this.gui = new dat.GUI();
@@ -49,7 +50,9 @@ ax_GUI = function (service) {
             //get the toolpint of the grippers
             var tp = [updatedPose.tpX, updatedPose.tpY, updatedPose.tpZ];
             //update the ball for testing
-            service.pincher.toolPoint.position.set( tp[0], tp[2], -tp[1] );    
+            service.pincher.toolPoint.position.set( tp[0], tp[2], -tp[1] ); 
+            
+            service.poseEditor.render();
         }else{
             log.warning("Please select a pose");
         }

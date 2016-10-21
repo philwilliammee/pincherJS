@@ -77,3 +77,86 @@ sequences = function(){
     parent.poseEditor.render();
     return parent.poses[poseID];
     **/    
+   
+       //I really want to update this only with getters and setters make this local
+    /**
+    this.pose = function(){
+        var newPose = {
+            id: pose_index,
+            name: ""+pose_index,
+            m1: 512,
+            m2: 512,
+            m3: 512,
+            m4: 512,
+            m5: 512,
+            get motors(){
+                return [m1,m2,m3,m4,m5];
+            },
+            set motors (motors){
+                this.m1 = motors[0];
+                this.m1 = motors[1];
+                this.m1 = motors[2];
+                this.m1 = motors[3];
+                this.m1 = motors[4];
+            }
+            rad1: Math.PI,
+            rad2: Math.PI,
+            rad3: Math.PI,
+            rad4: Math.PI,
+            rad5: Math.PI,
+            tpX : 0,
+            tpY : 0,
+            tpZ : 323,   
+            tpGA : 0,
+            active: "",
+            error: false
+        };
+        pose_index++;
+        return newPose;
+    };
+    **/
+
+    
+    /**
+    this.updateIK = function(ik_array){
+        // returns a ret object from IKEngine with e=error, 
+        // rads = than joint angles in radians
+        //this is aweful shouldnt have to set this here
+        //var ret = this.ik.calc_positions( this.TP.x, this.TP.y , this.TP.z, this.GA);
+        var ret = this.ik.calc_positions( ik_array[0], ik_array[1], ik_array[2], ik_array[3] );
+        if (!ret.e){
+            this.pincher.setAngles(ret.rads);//should you really set angles here?
+            
+        }else{
+            console.log("targeted position can not be reached");
+        }
+    };
+    **/
+   
+       this.TP = {
+        x:0,
+        y:0,
+        z:0
+    };
+    this.GA = 0;
+    
+        /**
+    //@TODO include TP, and rads
+    this.updatePose = function(myPose){
+        assert(typeof myPose.id === "integer");
+        for (var i=0; i<parent.poses.length; i++){
+            if (myPose.id === parent.poses[i].id){
+                //parent.poses[i] = myPose;
+                parent.poses[i].M
+                parent.poses[i].m1 = parseInt(myPose.m1);
+                parent.poses[i].m2 = parseInt(myPose.m2);
+                parent.poses[i].m3 = parseInt(myPose.m3);
+                parent.poses[i].m4 = parseInt(myPose.m4);
+                parent.poses[i].m5 = parseInt(myPose.m5);
+                return parent.poses[i];//testing
+                
+            }
+        }
+        return;//not found
+    };
+    **/

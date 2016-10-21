@@ -118,6 +118,24 @@ function Log(){
     }
 
 }    
+
+function strA2intA(strA){
+    var intA = [];
+    for (var i=0; i<strA.length; i++){
+        intA.push(parseInt(strA[i]));
+    }
+    return intA;
+}
   
 //add a log the global scope  
 var log = new Log();
+
+function assert(condition, message) {
+    if (!condition) {
+        message = message || "Assertion failed";
+        if (typeof Error !== "undefined") {
+            throw new Error(message);
+        }
+        throw message; // Fallback
+    }
+}
