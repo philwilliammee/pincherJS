@@ -139,3 +139,29 @@ function assert(condition, message) {
         throw message; // Fallback
     }
 }
+
+//returns the distance between two points
+function getDistance(p1,p2){
+    var xd = p2.x-p1.x;
+    var yd = p2.y-p1.y;
+    var zd = p2.z-p1.z;
+    var distance = Math.sqrt(xd*xd + yd*yd + zd*zd);
+    return distance;
+}
+
+//simple sphere collison test
+function simpleSphere(p1,p2,r1,r2){
+    //a test two see if two spheres are overlapping
+    var dist= getDistance(p1, p2);
+    if (dist <= (r1+r2)){ return true;}
+    return false;
+    }
+    
+String.prototype.format = function() {
+    var formatted = this;
+    for (var i = 0; i < arguments.length; i++) {
+        var regexp = new RegExp('\\{'+i+'\\}', 'gi');
+        formatted = formatted.replace(regexp, arguments[i]);
+    }
+    return formatted;
+};   

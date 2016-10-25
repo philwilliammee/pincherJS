@@ -8,6 +8,8 @@ var Panel2View = function(service){
     this.initialize = function () {
         this.$el = $('<div/>');
         this.$el.on('click', '#sphereInfoButton', logJsphere);
+        this.$el.on('click', '#testCollision', testCollision);
+        
         this.$el.on('click', '#infoButton', logAngle);
         this.$el.on('click', '#getTP', logTP);
     };
@@ -16,6 +18,25 @@ var Panel2View = function(service){
          var data = service.pincher.getSpheresPos();
          console.log(data);
          log.info(JSON.stringify(data));        
+    }
+    
+    function testCollision(){
+        var data = service.pincher.getSpheresPos();
+        var rad = service.pincher.sphereRadius; //20
+        var col = false;
+        for (var i = 2; i<data.length; i++){
+            for (var j = 0; j<data.length; j++){
+                if ( i !== j){
+                    col = simpleSphere(data[i], data[j], rad, rad );
+                    if (col){
+                        console.log("Spere-{0} colided with Sphere-{1}".format(i,j));
+                        return col;//return on first collision
+                    }
+                }
+            }
+        }
+        console.log("no collision {0}".format(JSON.stringify(data)));
+        return col;
     }
     
     function logAngle(){

@@ -9,7 +9,7 @@
 var Pincher = function(canvasContainer){
     var width=$(canvasContainer).width();
     var height=$( window ).height()/1.5; //$(canvasContainer).height();
-
+    this.sphereRadius = 20;
     var parent = this;
     //parts and joints names should be swaped for clarity parts are really joints
     var joints={};
@@ -35,7 +35,7 @@ var Pincher = function(canvasContainer){
     
     //initialize the canvas
     function init(){
-       var blueMaterial = new THREE.MeshBasicMaterial( { color: 0x0000ff});//, wireframe: true } );
+       var blueMaterial = new THREE.MeshLambertMaterial( { color: 0x0000ff});//, wireframe: true } );
        parent.renderer = new THREE.WebGLRenderer( { antialias: false  } );
        parent.scene = new THREE.Scene();
        parent.scene.fog = new THREE.FogExp2( 0xcccccc, 0.001 );
@@ -97,7 +97,7 @@ var Pincher = function(canvasContainer){
          var material = new THREE.MeshFaceMaterial(materials);
          joints.shoulder = new THREE.Mesh( geometry, material );
          
-         jSpheres.sRoll = new THREE.Mesh( new THREE.SphereGeometry( 20,20,20 ), blueMaterial );
+         jSpheres.sRoll = new THREE.Mesh( new THREE.SphereGeometry( parent.sphereRadius,parent.sphereRadius,parent.sphereRadius ), blueMaterial );
          jSpheres.sRoll.position.set( 0, 0, 0 );  
          parts.sRoll.add(jSpheres.sRoll);
          parts.sRoll.add(joints.shoulder);
@@ -108,7 +108,7 @@ var Pincher = function(canvasContainer){
        function createBicep( geometry, materials ) {
          var material = new THREE.MeshFaceMaterial(materials);
          joints.elbow = new THREE.Mesh( geometry, material );
-         jSpheres.e = new THREE.Mesh( new THREE.SphereGeometry( 20,20,20 ), blueMaterial );
+         jSpheres.e = new THREE.Mesh( new THREE.SphereGeometry( parent.sphereRadius,parent.sphereRadius,parent.sphereRadius ), blueMaterial );
          jSpheres.e.position.set( 106.7, 0, 0 );
          parts.s.add(jSpheres.e);
          parts.s.add(joints.elbow);
@@ -117,7 +117,7 @@ var Pincher = function(canvasContainer){
        function createWrist( geometry, materials ) {
          var material = new THREE.MeshFaceMaterial(materials);
          joints.wrist = new THREE.Mesh( geometry, material );
-         jSpheres.w = new THREE.Mesh( new THREE.SphereGeometry( 20,20,20 ), blueMaterial );
+         jSpheres.w = new THREE.Mesh( new THREE.SphereGeometry( parent.sphereRadius,parent.sphereRadius,parent.sphereRadius ), blueMaterial );
          jSpheres.w.position.set( 213.2, 0, 0 );
          parts.e.add( jSpheres.w );
          parts.e.add( joints.wrist );
@@ -126,7 +126,7 @@ var Pincher = function(canvasContainer){
         function createGripper( geometry, materials ) {
          var material = new THREE.MeshFaceMaterial(materials);
          joints.gripper = new THREE.Mesh( geometry, material );
-         jSpheres.tp = new THREE.Mesh( new THREE.SphereGeometry( 20,20,20 ), blueMaterial );
+         jSpheres.tp = new THREE.Mesh( new THREE.SphereGeometry( parent.sphereRadius,parent.sphereRadius,parent.sphereRadius ), blueMaterial );
          jSpheres.tp.position.set( 323, 0, 0 );
          parts.w.add(jSpheres.tp);
          joints.gripper.closing = true;
@@ -251,14 +251,16 @@ var Pincher = function(canvasContainer){
      };
      
      this.getSpheresPos = function(){
-        //maybe should rotate whole sceen to align y and z
+        
         //solution from http://stackoverflow.com/questions/14211627/three-js-how-to-get-position-of-a-mesh
+        
         var spheres = [jSpheres.sRoll, jSpheres.e, jSpheres.w, jSpheres.tp];
         var retI = [];
         var retF = [];
         for (var i=0; i<spheres.length; i++){
             var position = new THREE.Vector3();
             position.setFromMatrixPosition( spheres[i].matrixWorld );
+            //maybe should rotate whole sceen to align y and z
             retF.push({x:position.x, y:position.z, z:-position.y});
             retI.push({x:Math.round(position.x), y:-Math.round(position.z), z:Math.round(position.y) });
         }     
