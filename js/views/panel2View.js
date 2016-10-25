@@ -7,11 +7,19 @@
 var Panel2View = function(service){
     this.initialize = function () {
         this.$el = $('<div/>');
+        this.$el.on('click', '#sphereInfoButton', logJsphere);
         this.$el.on('click', '#infoButton', logAngle);
         this.$el.on('click', '#getTP', logTP);
     };
     
+    function logJsphere(){
+         var data = service.pincher.getSpheresPos();
+         console.log(data);
+         log.info(JSON.stringify(data));        
+    }
+    
     function logAngle(){
+        //this needs update
          var data = service.radsToMotors();
          console.log(data);
          log.info(JSON.stringify(data));
