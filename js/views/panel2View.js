@@ -21,22 +21,12 @@ var Panel2View = function(service){
     }
     
     function testCollision(){
-        var data = service.pincher.getSpheresPos();
-        var rad = service.pincher.sphereRadius; //20
-        var col = false;
-        for (var i = 2; i<data.length; i++){
-            for (var j = 0; j<data.length; j++){
-                if ( i !== j){
-                    col = simpleSphere(data[i], data[j], rad, rad );
-                    if (col){
-                        console.log("Spere-{0} colided with Sphere-{1}".format(i,j));
-                        return col;//return on first collision
-                    }
-                }
-            }
+        var col = service.sphereCollision();
+        if (col){
+            console.log("Spere-{0} colided with Sphere-{1}".format(col.spheres[0],col.spheres[1]));
+        }else{
+            console.log("no collision");
         }
-        console.log("no collision {0}".format(JSON.stringify(data)));
-        return col;
     }
     
     function logAngle(){

@@ -13,7 +13,26 @@ var Pincher = function(canvasContainer){
     var parent = this;
     //parts and joints names should be swaped for clarity parts are really joints
     var joints={};
+    
+    //@ todo encapsulate this and make pretty
+    // create a skeleton and spheres to mimic the robot
+    // the spheres can move through collisions but the robot can not
     var jSpheres = {};
+    
+    var jParts = {        
+        b: new THREE.Object3D(),
+        sRoll: new THREE.Object3D(),
+        s: new THREE.Object3D(),
+        e: new THREE.Object3D(),
+        w: new THREE.Object3D()
+    };
+    //set up linkeage
+    jParts.b.add(jParts.sRoll);
+    jParts.sRoll.add(jParts.s);
+    jParts.s.add(jParts.e);
+    jParts.e.add(jParts.w);
+    
+    //@todo clean up and encapsulate
     var parts ={
         b: new THREE.Object3D(),
         sRoll: new THREE.Object3D(),
@@ -99,10 +118,11 @@ var Pincher = function(canvasContainer){
          
          jSpheres.sRoll = new THREE.Mesh( new THREE.SphereGeometry( parent.sphereRadius,parent.sphereRadius,parent.sphereRadius ), blueMaterial );
          jSpheres.sRoll.position.set( 0, 0, 0 );  
-         parts.sRoll.add(jSpheres.sRoll);
+         jParts.sRoll.add(jSpheres.sRoll);
          parts.sRoll.add(joints.shoulder);
          //scene.add( joints.shoulder );
          parent.scene.add(parts.sRoll);
+         parent.scene.add(jParts.sRoll);
        }
 
        function createBicep( geometry, materials ) {
@@ -110,7 +130,7 @@ var Pincher = function(canvasContainer){
          joints.elbow = new THREE.Mesh( geometry, material );
          jSpheres.e = new THREE.Mesh( new THREE.SphereGeometry( parent.sphereRadius,parent.sphereRadius,parent.sphereRadius ), blueMaterial );
          jSpheres.e.position.set( 106.7, 0, 0 );
-         parts.s.add(jSpheres.e);
+         jParts.s.add(jSpheres.e);
          parts.s.add(joints.elbow);
        }
 
@@ -119,7 +139,7 @@ var Pincher = function(canvasContainer){
          joints.wrist = new THREE.Mesh( geometry, material );
          jSpheres.w = new THREE.Mesh( new THREE.SphereGeometry( parent.sphereRadius,parent.sphereRadius,parent.sphereRadius ), blueMaterial );
          jSpheres.w.position.set( 213.2, 0, 0 );
-         parts.e.add( jSpheres.w );
+         jParts.e.add( jSpheres.w );
          parts.e.add( joints.wrist );
        }
 
@@ -128,7 +148,7 @@ var Pincher = function(canvasContainer){
          joints.gripper = new THREE.Mesh( geometry, material );
          jSpheres.tp = new THREE.Mesh( new THREE.SphereGeometry( parent.sphereRadius,parent.sphereRadius,parent.sphereRadius ), blueMaterial );
          jSpheres.tp.position.set( 323, 0, 0 );
-         parts.w.add(jSpheres.tp);
+         jParts.w.add(jSpheres.tp);
          joints.gripper.closing = true;
          joints.gripper.pos = 0;
          parts.w.add(joints.gripper);
@@ -250,10 +270,30 @@ var Pincher = function(canvasContainer){
 
      };
      
+    //angle setters
+    this.setSphereShoulderRoll =function( rad ){
+        jParts.sRoll.rotation.y = rad;
+    };
+
+    this.setSphereShoulder =function( rad ){
+        jParts.s.rotation.z = rad;
+    };
+
+    this.setSphereElbow = function( rad ){
+        jParts.e.translateX( 106.7 );
+        jParts.e.rotation.z = rad;
+        jParts.e.translateX( -106.7 ); 
+    };
+
+    this.setSphereWrist = function( rad ){
+        jParts.w.translateX( 213.2 );
+        jParts.w.rotation.z = rad;
+        jParts.w.translateX( -213.2  );    
+    };     
+     
+     
      this.getSpheresPos = function(){
-        
         //solution from http://stackoverflow.com/questions/14211627/three-js-how-to-get-position-of-a-mesh
-        
         var spheres = [jSpheres.sRoll, jSpheres.e, jSpheres.w, jSpheres.tp];
         var retI = [];
         var retF = [];
@@ -265,6 +305,14 @@ var Pincher = function(canvasContainer){
             retI.push({x:Math.round(position.x), y:-Math.round(position.z), z:Math.round(position.y) });
         }     
          return (retI);
+     };
+     
+     this.setSpheresAngles = function(rads){
+         this.setSphereShoulderRoll(rads[0]);
+         this.setSphereShoulder(rads[1]);
+         this.setSphereElbow(rads[2]);
+         this.setSphereWrist(rads[3]);         
+         
      };
      
      var render = function () {

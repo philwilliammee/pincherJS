@@ -10,12 +10,13 @@ var Service = function(){
     var parent = this;
     //I really want to update this only with getters and setters make this local
     this.poses = [];
+    this.collisionDetact = true;
     var pose_index = 0;
     
     //recieves the dom the robot goes in
     this.init = function(canvasContainer){
         var deffered = new $.Deferred();
-        this.pincher = new Pincher(canvasContainer);
+        this.pincher = new Pincher(canvasContainer, parent);
         this.ik = new IK();
         //promise to return the rendered pincher dom
         deffered.resolve( this.pincher.renderer.domElement );
@@ -83,7 +84,7 @@ var Service = function(){
     this.buildMotortest =function(){
         var jLine = [];
         console.log("50 random test poses are created in pose editor panel to test the sequencer, and panel functions");
-        for (i=0; i<10; i++){
+        for (i=0; i<20; i++){
             var newPose = new Pose(pose_index); //new parent.pose(); 
             pose_index++;
             parent.poses.push(newPose);
@@ -103,7 +104,7 @@ var Service = function(){
     this.buildPosetest =function(){
         var jLine = [];
         console.log("50 random test poses are created in pose editor panel to test the sequencer, and panel functions");
-        for (var i=0; i<10; i++){
+        for (var i=0; i<20; i++){
             var newPose = new Pose(pose_index); //new parent.pose(); 
             
             pose_index++;
@@ -200,5 +201,22 @@ var Service = function(){
     this.stopSequence = function(){
         parent.tween.stop();  
     };  
+    
+    this.sphereCollision = function(){
+        var data = parent.pincher.getSpheresPos();
+        var rad = parent.pincher.sphereRadius; //20
+        var col = false;
+        for (var i = 2; i<data.length; i++){
+            for (var j = 0; j<data.length; j++){
+                if ( i !== j){
+                    col = simpleSphere(data[i], data[j], rad, rad );
+                    if (col){
+                        return {col:true, spheres:[i,j]};//return on first collision
+                    }
+                }
+            }
+        }
+        return col;
+    };
     
 };

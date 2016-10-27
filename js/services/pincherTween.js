@@ -8,7 +8,10 @@
 // or just at each pose iteration
 // this needs a lot of clean up
 //currently only using synchronous movement of joints @TODO add linear interpolation of TP
+
+//THIS is all wrong need calculate sequence at start check for collisions ect and then iterate through the sequence
 function sequencer( service ){
+    //current sequence
     var sequence = 0;
     //tween stuff
     var curPose = [0, 0, 0, 0];
@@ -60,12 +63,26 @@ function sequencer( service ){
 
             });  
 
+    
     function update(){//@TODO access properties directly
-        service.pincher.setShoulderRoll(coords.sroll);
-        service.pincher.setShoulder(coords.shoulder);
-        service.pincher.setElbow(coords.elbow);
-        service.pincher.setWrist(coords.wrist);
-        //Testing
+        //var curCoords = service.pincher.getAngles();
+        service.pincher.setSpheresAngles([
+            coords.sroll, coords.shoulder, coords.elbow, coords.wrist
+        ]);
+        //this is actually the last pos because the position has not been updated yet
+        var col = service.sphereCollision();
+        
+        if (col){
+            var warning = "Spere-{0} colided with Sphere-{1}".format(col.spheres[0],col.spheres[1])
+            console.log(warning);    
+            log.warning(warning);
+        }else{
+            service.pincher.setShoulderRoll(coords.sroll);
+            service.pincher.setShoulder(coords.shoulder);
+            service.pincher.setElbow(coords.elbow);
+            service.pincher.setWrist(coords.wrist);
+        }
+        
     }
     
     service.tween.chain(service.tween);
