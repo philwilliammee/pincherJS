@@ -3,14 +3,14 @@
 // saved on wayback machine
 //modified from pyPinher2 for 3d coordinates
 
-/* global log */
+/* global log, settings */
 
 //could use some wrist orbital controls
 var IK = function(){
     var self = this;
     this.l12 = 0.0;                      // hypotenuse belween a1 & a3
     this.a12 = 0.0;                      // inscribed angle between hypotenuse, w 
-    this.l = [0.0, 105.0, 105.0, 113.0]; // 98.0])// actual measurements of segment length in mm
+    this.l = settings.links;   // 98.0])// an array of actual measurements of segment length in mm
     this.w = [0.0, 0.0, 0.0, 0.0]; // horizontal coordinate
     this.z = [0.0, 0.0, 0.0, 0.0]; // vertical coordinate
     this.x = [0.0, 0.0, 0.0, 0.0]; // x axis components 

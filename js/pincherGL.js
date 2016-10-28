@@ -9,7 +9,7 @@
 var Pincher = function(canvasContainer){
     var width=$(canvasContainer).width();
     var height=$( window ).height()/1.5; //$(canvasContainer).height();
-    this.sphereRadius = 20;
+    this.sphereRadius = 22;
     var parent = this;
     //parts and joints names should be swaped for clarity parts are really joints
     var joints={};
@@ -111,18 +111,22 @@ var Pincher = function(canvasContainer){
          joints.base = new THREE.Mesh( geometry, material );
          parts.b.add(joints.base);
          parent.scene.add( parts.b );
+         
+         jSpheres.base = new THREE.Mesh( new THREE.SphereGeometry( 2.2*parent.sphereRadius,2.2*parent.sphereRadius,2.2*parent.sphereRadius ), blueMaterial );
+         jSpheres.base.position.set( 0, -90, -20 );  
+         jParts.b.add(jSpheres.base);
+         parent.scene.add(jParts.b);
      }       
        function createShoulder( geometry, materials ) {
          var material = new THREE.MeshFaceMaterial(materials);
          joints.shoulder = new THREE.Mesh( geometry, material );
+         parent.scene.add(parts.sRoll);        
+         parent.scene.add(jParts.sRoll);         
          
          jSpheres.sRoll = new THREE.Mesh( new THREE.SphereGeometry( parent.sphereRadius,parent.sphereRadius,parent.sphereRadius ), blueMaterial );
          jSpheres.sRoll.position.set( 0, 0, 0 );  
          jParts.sRoll.add(jSpheres.sRoll);
          parts.sRoll.add(joints.shoulder);
-         //scene.add( joints.shoulder );
-         parent.scene.add(parts.sRoll);
-         parent.scene.add(jParts.sRoll);
        }
 
        function createBicep( geometry, materials ) {
@@ -291,10 +295,9 @@ var Pincher = function(canvasContainer){
         jParts.w.translateX( -213.2  );    
     };     
      
-     
-     this.getSpheresPos = function(){
+    this.getSpheresPos = function(){
         //solution from http://stackoverflow.com/questions/14211627/three-js-how-to-get-position-of-a-mesh
-        var spheres = [jSpheres.sRoll, jSpheres.e, jSpheres.w, jSpheres.tp];
+        var spheres = [jSpheres.base, jSpheres.sRoll, jSpheres.e, jSpheres.w, jSpheres.tp];
         var retI = [];
         var retF = [];
         for (var i=0; i<spheres.length; i++){
@@ -307,12 +310,28 @@ var Pincher = function(canvasContainer){
          return (retI);
      };
      
+     this.getSphereRadius = function(){
+         return [2.2*this.sphereRadius, this.sphereRadius, this.sphereRadius, this.sphereRadius, this.sphereRadius ];
+     };
+     
      this.setSpheresAngles = function(rads){
          this.setSphereShoulderRoll(rads[0]);
          this.setSphereShoulder(rads[1]);
          this.setSphereElbow(rads[2]);
          this.setSphereWrist(rads[3]);         
          
+     };
+     
+     this.showSpheres = function(){
+         for (var sphere in jSpheres){
+             jSpheres[sphere].visible=true;
+         }       
+     };
+     
+     this.hideSpheres = function(){
+         for (var sphere in jSpheres){
+             jSpheres[sphere].visible=false;
+         }       
      };
      
      var render = function () {
@@ -334,11 +353,11 @@ var Pincher = function(canvasContainer){
      };
      
      this.hideLine = function(){
-         parent.line.visable = false;
+         parent.line.visible = false;
      };
      
      this.showLine = function(){
-         parent.line.visable = true;
+         parent.line.visible = true;
      };     
      
      

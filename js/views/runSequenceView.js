@@ -4,6 +4,7 @@
 
 //the runsequence panel working quite nicely
 //@todo maybe add more tweenining options for testing like timedelta etc
+//@TODO the tool path line should be updated with every new sequence start
 var RunSequenceView = function (service) {
     this.service = service;
     var parent = this;

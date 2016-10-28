@@ -1,9 +1,21 @@
 /*! common.js - v0.0.1 - (c) 2016 Phil Williammee - licensed MIT */
 //GLOBAL functions
-//the map function used by arduino
-function ard_map(x, in_min, in_max, out_min, out_max){
-    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min ;
+    
+function radLimits(rad){
+    var lowLimit = 0.523599-Math.PI;//0.523599 = 30deg
+    var highLimit = Math.PI-0.523599;
+    var e = false;
+    if (highLimit>rad && rad > lowLimit){
+        return {rad:rad, e:e};
+    }else if (lowLimit>rad){
+        return {rad:lowLimit, e:"low limit"};
+    }else if (rad>highLimit){
+        return {rad:highLimit, e:"high limit"};
+    }else{
+        console.log("RadianLimit error");
+        log.error("RadianLimit error");
     }
+}    
     
 //helper functions for converting ax, degrees, radians, toolpoints(Kinematics)
 function IK_2_servo(ax_list){
@@ -112,12 +124,11 @@ function Log(){
         $("#alert").html(template);
         $("#alert").fadeTo(parent.displayTime, 500).slideUp(500, function(){
             $("#alert").slideUp(500);
-        });   
-           
-
+        });
     }
-
 }    
+//add a log the global scope  
+var log = new Log();
 
 function strA2intA(strA){
     var intA = [];
@@ -126,9 +137,6 @@ function strA2intA(strA){
     }
     return intA;
 }
-  
-//add a log the global scope  
-var log = new Log();
 
 function assert(condition, message) {
     if (!condition) {
@@ -165,3 +173,8 @@ String.prototype.format = function() {
     }
     return formatted;
 };   
+
+//the map function used by arduino
+function ard_map(x, in_min, in_max, out_min, out_max){
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min ;
+}

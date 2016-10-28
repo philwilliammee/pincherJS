@@ -10,7 +10,7 @@ var Service = function(){
     var parent = this;
     //I really want to update this only with getters and setters make this local
     this.poses = [];
-    this.collisionDetact = true;
+    this.doCollisionDetect = true;
     var pose_index = 0;
     
     //recieves the dom the robot goes in
@@ -204,12 +204,12 @@ var Service = function(){
     
     this.sphereCollision = function(){
         var data = parent.pincher.getSpheresPos();
-        var rad = parent.pincher.sphereRadius; //20
+        var rad = parent.pincher.getSphereRadius(); //20
         var col = false;
         for (var i = 2; i<data.length; i++){
             for (var j = 0; j<data.length; j++){
                 if ( i !== j){
-                    col = simpleSphere(data[i], data[j], rad, rad );
+                    col = simpleSphere(data[i], data[j], rad[i], rad[j] );
                     if (col){
                         return {col:true, spheres:[i,j]};//return on first collision
                     }

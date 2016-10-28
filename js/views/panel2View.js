@@ -9,10 +9,24 @@ var Panel2View = function(service){
         this.$el = $('<div/>');
         this.$el.on('click', '#sphereInfoButton', logJsphere);
         this.$el.on('click', '#testCollision', testCollision);
+        this.$el.on('click', '#testRadLimits', testRadLimits);
         
         this.$el.on('click', '#infoButton', logAngle);
         this.$el.on('click', '#getTP', logTP);
     };
+    
+    function testRadLimits(){
+        var coords = service.pincher.getAngles();
+        console.log(coords);
+        for (var rad = 0; rad<coords.length; rad++){
+            ret = radLimits(coords[rad]);
+            //console.log(ret);
+            if (ret.e){
+                console.log("error {0} {1}".format(ret.e, rad));
+            }
+        }        
+        
+    }
     
     function logJsphere(){
          var data = service.pincher.getSpheresPos();

@@ -15,7 +15,7 @@
         //render the doms
         $("#navTemplate").load("./templates/nav.html", function(tmpl){
             NavView.prototype.template = Handlebars.compile($("#navbar-tpl").html());
-            $("#navTemplate").html(new NavView().render().$el);
+            $("#navTemplate").html(new NavView(service).render().$el);
         }); 
 
         $("#sideBarTemplate").load("./templates/sideBar.html", function(tmpl){

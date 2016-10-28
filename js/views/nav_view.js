@@ -7,7 +7,7 @@
 // must import obj file, save sequence file, maybe show fullscreen
 // show toolpath line, collision detection, safety limits
 // add more todo here
-var NavView = function () {
+var NavView = function ( service ) {
 
     this.initialize = function () {
         this.$el = $('<div/>');
@@ -41,12 +41,13 @@ var NavView = function () {
         }
     }
     function cb3Clicked(val){
+        //enable collision detect
         var myChecked= $(this).is(':checked');
         
         if (myChecked){
-            log.info("cb3Clicked Checked not implemented");
+            service.doCollisionDetect = true;
         }else{
-            log.info("unchecked");
+            service.doCollisionDetect = false;
         }
     }
     function cb4Clicked(val){
@@ -59,21 +60,22 @@ var NavView = function () {
         }
     }
     function cb5Clicked(val){
+        //show hide spheres
         var myChecked= $(this).is(':checked');
         
         if (myChecked){
-            log.info("cb5Clicked Checked not implemented");
+            service.pincher.showSpheres();
         }else{
-            log.info("unchecked");
+            service.pincher.hideSpheres();
         }
     }   
     function cb6Clicked(val){
         var myChecked= $(this).is(':checked');
         
         if (myChecked){
-            log.info("cb6Clicked Checked not implemented");
+            service.pincher.line.visible = true;
         }else{
-            log.info("unchecked");
+            service.pincher.line.visible = false;
         }
     }   
     function cb7Clicked(val){

@@ -64,23 +64,30 @@ function sequencer( service ){
             });  
 
     
-    function update(){//@TODO access properties directly
-        //var curCoords = service.pincher.getAngles();
+    function update(){//@TODO move the testing out of here and into set position property
+        for (var rad in coords){
+            ret = radLimits(coords[rad]);
+            if (ret.e){
+                console.log("error {0} {1}".format(ret.e, rad));
+            }
+            coords[rad] = ret.rad;
+        }
+        
+        
         service.pincher.setSpheresAngles([
             coords.sroll, coords.shoulder, coords.elbow, coords.wrist
         ]);
-        //this is actually the last pos because the position has not been updated yet
-        var col = service.sphereCollision();
+        var col = false;
+        if ( service.doCollisionDetect ){
+            col = service.sphereCollision();
+        }
         
         if (col){
-            var warning = "Spere-{0} colided with Sphere-{1}".format(col.spheres[0],col.spheres[1])
-            console.log(warning);    
+            //probably should delete the tween and make a new tween for smooth transitions
+            var warning = "Spere-{0} colided with Sphere-{1}".format(col.spheres[0],col.spheres[1]);
             log.warning(warning);
         }else{
-            service.pincher.setShoulderRoll(coords.sroll);
-            service.pincher.setShoulder(coords.shoulder);
-            service.pincher.setElbow(coords.elbow);
-            service.pincher.setWrist(coords.wrist);
+            service.pincher.setAngles([coords.sroll,coords.shoulder,coords.elbow,coords.wrist]);
         }
         
     }

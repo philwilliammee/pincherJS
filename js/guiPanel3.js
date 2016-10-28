@@ -12,13 +12,13 @@ radsGUI = function (service) {
     this.gui = new dat.GUI();
     //define parameters
     var parameters = {
-        angle1: 4.71, angle2: 1.57, angle3: 0, angle4: 0, angle5: 0
+        angle1: 0, angle2: 0, angle3: 0, angle4: 0, angle5: 0
     };
-    var m1 = this.gui.add(parameters, 'angle1').min(0).max(6.28).step(.01).listen();
-    var m2 = this.gui.add(parameters, 'angle2').min(0).max(6.28).step(.01).listen();
-    var m3 = this.gui.add(parameters, 'angle3').min(0).max(6.28).step(.01).listen();
-    var m4 = this.gui.add(parameters, 'angle4').min(0).max(6.28).step(.01).listen();
-    var m5 = this.gui.add(parameters, 'angle5').min(0).max(6.28).step(.01).listen();
+    var m1 = this.gui.add(parameters, 'angle1').min(-3.14).max(3.14).step(.01).listen();
+    var m2 = this.gui.add(parameters, 'angle2').min(-3.14).max(3.14).step(.01).listen();
+    var m3 = this.gui.add(parameters, 'angle3').min(-3.14).max(3.14).step(.01).listen();
+    var m4 = this.gui.add(parameters, 'angle4').min(-3.14).max(3.14).step(.01).listen();
+    var m5 = this.gui.add(parameters, 'angle5').min(-3.14).max(3.14).step(.01).listen();
 
     m1.onChange(function (value) {
         
