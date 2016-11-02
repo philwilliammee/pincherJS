@@ -50,18 +50,24 @@ radsGUI = function (service) {
     function poseWorker(){
         //get all of the slider values
         var rad_array = self.getRadsSliders();
-        //update the robots angles based on sliders
-        r.setAngles(rad_array);
-        //get the curent active pose id
-        var poseID = service.poseEditor.getActive();
-        //get the pose by ID
-        var pose = service.poses[poseID];
-        //update th pose data
-        var updated_pose = service.setPoseByRads(pose, rad_array);
-        //set the ball for testing
-        service.pincher.toolPoint.position.set(updated_pose.tpX, updated_pose.tpZ, -updated_pose.tpY);  
+        //get the curent active pose 
+        var pose = service.getActivePose();
         
-        service.poseEditor.render();
+        if (pose){
+            //update the pose data
+            var updated_pose = service.setPoseByRads(pose, rad_array);
+
+            //set the ball for testing
+            service.pincher.toolPoint.position.set(updated_pose.tpX, updated_pose.tpZ, -updated_pose.tpY);  
+
+            //update the robots angles based on updated pose
+            service.setAngles(updated_pose.rads);
+
+            service.poseEditor.render();
+        }
+        else{
+            log.info("please select a pose");
+        }
     }
 
     this.getRadsSliders = function () {

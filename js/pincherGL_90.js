@@ -95,14 +95,14 @@ var Pincher = function(canvasContainer){
 
        // Load the JSON files and provide callback functions (modelToScene
        var loader = new THREE.JSONLoader();
-       loader.load( "./obj/p2.json", createShoulder );
+       loader.load( "./obj/p2_2.json", createShoulder );
        loader.load( "./obj/p1.json", createBase );
-       loader.load( "./obj/p3.json", createBicep );
-       loader.load( "./obj/p4.json", createWrist );
-       loader.load( "./obj/p5.json", createGripper );
-       loader.load( "./obj/pRail.json", createGrail );
-       loader.load( "./obj/pGR.json", createRG );
-       loader.load( "./obj/pGL.json", createLG );
+       loader.load( "./obj/p3_2.json", createBicep );
+       loader.load( "./obj/p4_2.json", createWrist );
+       loader.load( "./obj/p5_2.json", createGripper );
+       //loader.load( "./obj/pRail.json", createGrail );
+       loader.load( "./obj/pGR_2.json", createRG );
+       loader.load( "./obj/pGL_2.json", createLG );
 
         // After loading JSON OBJ add it to the scene
         // add the part to the joint
@@ -181,6 +181,7 @@ var Pincher = function(canvasContainer){
         parent.toolPoint.position.set( 0, 323, 0 );
         parent.scene.add( parent.toolPoint );    
         
+        //parent.drawLine();
     };//end of init
     
     //angle setters
@@ -189,19 +190,19 @@ var Pincher = function(canvasContainer){
     };
 
     this.setShoulder =function( rad ){
-        parts.s.rotation.z = rad ;
+        parts.s.rotation.x = rad;
     };
 
     this.setElbow = function( rad ){
-        parts.e.translateX( 106.7 );
-        parts.e.rotation.z = rad;
-        parts.e.translateX( -106.7 ); 
+        parts.e.translateY( 106.7 );
+        parts.e.rotation.x = rad;
+        parts.e.translateY( -106.7 ); 
     };
 
     this.setWrist = function( rad ){
-        parts.w.translateX( 213.2 );
-        parts.w.rotation.z = rad;
-        parts.w.translateX( -213.2  );    
+        parts.w.translateY( 213.2 );
+        parts.w.rotation.x = rad;
+        parts.w.translateY( -213.2  );    
     };
 
     function setLG( rad ){
@@ -255,8 +256,7 @@ var Pincher = function(canvasContainer){
     }
     
     //sets the joint angles by an array
-     this.setAngles = function(rads, caller){
-         if (!caller){console.trace("illegal call");}
+     this.setAngles = function(rads){
          this.setShoulderRoll(rads[0]);
          this.setShoulder(rads[1]);
          this.setElbow(rads[2]);
@@ -264,8 +264,7 @@ var Pincher = function(canvasContainer){
      };
      
      //returns an array of the current angles
-     this.getAngles =function(caller){
-         if (!caller){console.trace("illegal call");}
+     this.getAngles =function(){
          return [ 
             parts.sRoll.rotation.y,
             parts.s.rotation.z,
@@ -277,11 +276,11 @@ var Pincher = function(canvasContainer){
      
     //angle setters
     this.setSphereShoulderRoll =function( rad ){
-        jParts.sRoll.rotation.y = rad - 1.5708;
+        jParts.sRoll.rotation.y = rad;
     };
 
     this.setSphereShoulder =function( rad ){
-        jParts.s.rotation.z = rad + 1.5708;
+        jParts.s.rotation.z = rad;
     };
 
     this.setSphereElbow = function( rad ){

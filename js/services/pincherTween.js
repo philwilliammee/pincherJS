@@ -16,17 +16,19 @@ function sequencer( service ){
     //tween stuff
     var curPose = [0, 0, 0, 0];
     if (service.pincher){
-        curPose = service.pincher.getAngles();
+        console.log("getting current position");
+        curPose = service.getAngles();
     }
     //@todo properly initialize this and remove helper variables use pose objects and pincher objects
     var coords = { sroll: curPose[0], shoulder:curPose[1], elbow:curPose[2], wrist:curPose[3] };
     //var moveToCoord = { sroll: 1.57, shoulder:1.57, elbow:0, wrist:0};
     //set the tween as a service object
+    //PROBLEM TWEEN isn not moving across origin @TODO Fix this
     service.tween = new TWEEN.Tween(coords)
-            .to({ sroll: 1.57,//initial coordinates
-                  shoulder:1.57,
-                  elbow: 0,
-                  wrist: 0
+            .to({ sroll: coords[0],//initial coordinates
+                  shoulder:coords[1],
+                  elbow: coords[2],
+                  wrist: coords[3]
             }, service.timeDelta)
             //.delay(0)
             //.easing(TWEEN.Easing.Elastic.InOut)
@@ -61,19 +63,10 @@ function sequencer( service ){
                     sequence = 0;
                 }                       
 
-            });  
+            } );  
 
     
     function update(){//@TODO move the testing out of here and into set position property
-        for (var rad in coords){
-            ret = radLimits(coords[rad]);
-            if (ret.e){
-                console.log("error {0} {1}".format(ret.e, rad));
-            }
-            coords[rad] = ret.rad;
-        }
-        
-        
         service.pincher.setSpheresAngles([
             coords.sroll, coords.shoulder, coords.elbow, coords.wrist
         ]);
@@ -86,9 +79,21 @@ function sequencer( service ){
             //probably should delete the tween and make a new tween for smooth transitions
             var warning = "Spere-{0} colided with Sphere-{1}".format(col.spheres[0],col.spheres[1]);
             log.warning(warning);
+            return;
         }else{
-            service.pincher.setAngles([coords.sroll,coords.shoulder,coords.elbow,coords.wrist]);
+            service.setAngles([coords.sroll,coords.shoulder,coords.elbow,coords.wrist]);
         }
+        
+        if (service.doMotorLimits){
+            for (var rad in coords){
+                ret = radLimits(coords[rad]);
+                if (ret.e){
+                    log.warning("error {0} {1}".format(ret.e, rad));
+                    return;//
+                }
+                coords[rad] = ret.rad;
+            }
+        }        
         
     }
     

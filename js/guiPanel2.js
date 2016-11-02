@@ -41,16 +41,19 @@ ax_GUI = function (service) {
     
     function poseWorker(){
         //get the slider positions
-        var motors = self.getMotorSliders();
+        var axArray = self.getMotorSliders();
         //update the pose with all values
-        var updatedPose = service.modifyActivePose(motors);//if a pose is selected update it may want to change this to typical getpose by ID
+        var pose = service.getActivePose();
+        //var updatedPose = service.modifyActivePose(poseID);//if a pose is selected update it may want to change this to typical getpose by ID
+        var updatedPose = service.setPoseFromAxs(pose, axArray);
         if (updatedPose){
-            var rads = [updatedPose.rad1, updatedPose.rad2, updatedPose.rad3, updatedPose.rad4, updatedPose.rad5 ];
-            service.pincher.setAngles( rads );
-            //get the toolpint of the grippers
-            var tp = [updatedPose.tpX, updatedPose.tpY, updatedPose.tpZ];
-            //update the ball for testing
-            service.pincher.toolPoint.position.set( tp[0], tp[2], -tp[1] ); 
+            //var rads = [updatedPose.rad1, updatedPose.rad2, updatedPose.rad3, updatedPose.rad4, updatedPose.rad5 ];
+            
+            //set the ball for testing
+            service.pincher.toolPoint.position.set(updatedPose.tpX, updatedPose.tpZ, -updatedPose.tpY);  
+
+            //update the robots angles based on updated pose
+            service.setAngles(updatedPose.rads);
             
             service.poseEditor.render();
         }else{

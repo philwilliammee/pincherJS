@@ -34,10 +34,13 @@ var IK = function(){
     function calc_p1(){//calculate position 1
         self.a12 = Math.atan2(self.z[2],self.w[2]);//return the appropriate quadrant  
         
-        if ((2*self.l[1]*self.l12)===0 || Math.pow(self.l[1], 2)+Math.pow(self.l12, 2)-Math.pow(self.l[2], 2) ===0){
+        var numerator = Math.pow(self.l[1], 2)+Math.pow(self.l12, 2)-Math.pow(self.l[2], 2);
+        var denomenator = 2*self.l[1]*self.l12;
+        
+        if (denomenator===0 || numerator ===0){
             self.a[1] = self.a12;
         }else{//
-            self.a[1] = Math.acos((Math.pow(self.l[1], 2)+Math.pow(self.l12, 2)-Math.pow(self.l[2], 2))/(2*self.l[1]*self.l12))+self.a12;
+            self.a[1] = Math.acos(numerator/denomenator)+self.a12;
         }
         self.w[1] = Math.cos(self.a[1])*self.l[1];
         self.z[1] = Math.sin(self.a[1])*self.l[1];
@@ -62,7 +65,8 @@ var IK = function(){
         }
     }
              
-    this.calc_positions = function( t_x, t_y, t_z, g_a ){
+    this.calc_positions = function( t_x, t_y, t_z, g_a, caller ){
+        if (!caller){console.trace("illegal caller");}
         var error = false;
         //recieves in radians, calculates in radians, returns in degrees 
         self.gripper_angle  = g_a;
@@ -85,26 +89,29 @@ var IK = function(){
             log.warning("target position can not be reached");
             error = true;
         }
+        /*
+        rotate backwards
+        a_list =  [a*b for a,b in zip(a_list,direction)] 
+        mod_a = [a%360 for a in a_list]
+        */
+        //self.a[0] = self.a[0]+ 1.5708;
+        //self.a[1] = self.a[1]-1.5708;
 
-        //rotate backwards
-        //a_list =  [a*b for a,b in zip(a_list,direction)] 
-        //mod_a = [a%360 for a in a_list]
-        
         return  {e:error, rads: self.a} ;
     };
     
-    this.rads_2_TP = function(angles){
-        var error = false;
-        var gripper_angle = (angles[1]+angles[2]+angles[3]) %(2*Math.PI);
+    this.rads_2_TP = function(angles, caller){ 
+        if (!caller){console.trace("illegal caller");}
+        var error = false;      
+        var gripper_angle = ( angles[1]+angles[2]+angles[3] ) %(2*Math.PI);//Pluse the settings.offset for angle1
         var links = self.FK(angles);
         var tp = [links.xs.last(), links.ys.last(), links.zs.last(), gripper_angle];
         return {e:error, tp:tp }; 
-    };
-    
+    };        
     //forward kinematics
     // returns the location of each joint position 
     // accepts angles in radians return dictionary of arrays
-    this.FK = function(angles){
+    this.FK = function(angles){      
             var last_a = 0;
             var sum_real = 0;
             var sum_img = 0;

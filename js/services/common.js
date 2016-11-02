@@ -15,8 +15,14 @@ function radLimits(rad){
         console.log("RadianLimit error");
         log.error("RadianLimit error");
     }
-}    
+}  
+var TWO_PI = 2*Math.PI;
+function normalizeAngle(angle) {
     
+    return angle - TWO_PI * Math.floor((angle + Math.PI) / TWO_PI);
+    //return Math.atan2(Math.sin(angle), Math.cos(angle));
+}   
+
 //helper functions for converting ax, degrees, radians, toolpoints(Kinematics)
 function IK_2_servo(ax_list){
     //convert a list of servos to degrees
@@ -47,6 +53,7 @@ function deg_2_ax(deg){;
     return ax;  
 }
 
+/**
 function servo_2_angle_offset(coord_ang){//adjust servo angles to match starting position
     //This is needed because the calculations for the IK engine give the angles in a different direction
     //and the starting values are different the gl graphics are set to mid point of servos
@@ -58,6 +65,7 @@ function servo_2_angle_offset(coord_ang){//adjust servo angles to match starting
     new_angle.push(coord_ang[4]);
     return new_angle;
     }
+    **/
 //End of motor helper functions 
 
 //returns the last element in an array
@@ -177,4 +185,8 @@ String.prototype.format = function() {
 //the map function used by arduino
 function ard_map(x, in_min, in_max, out_min, out_max){
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min ;
+}
+
+function between(x, min, max) {
+  return x >= min && x <= max;
 }

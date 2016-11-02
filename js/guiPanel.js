@@ -36,29 +36,23 @@ GUI = function(service){
     });  
     
     function poseWorker(){
+        
         //get the IK and TP
         var ik_array = self.getIKSliders();
-        // do the IK
-        var ret = service.ik.calc_positions( ik_array[0], ik_array[1], ik_array[2], ik_array[3] );
-        if (!ret.e){
+        var pose = service.getActivePose();
+        // set the pose by IK
+        var updated_pose = service.setPoseByTP( pose, ik_array  );
+        if (updated_pose){
             //update the pincher arm
-            service.pincher.setAngles(ret.rads);
-            //get the curent active pose id
-            var poseID = service.poseEditor.getActive();
-            //get the pose by ID
-            var pose = service.poses[poseID];
-            //update th pose data
-            var updated_pose = service.setPoseByRads(pose, ret.rads);
+            service.setAngles(updated_pose.rads);
+
             //set the ball for testing using FK
             service.pincher.toolPoint.position.set(updated_pose.tpX, updated_pose.tpZ, -updated_pose.tpY);              
             //@todo for comparison actual TP
-            
+
             //update the poseditor with new data
             service.poseEditor.render();
-            
-        }else{
-            console.log("targeted position can not be reached");
-        }        
+        }
         
     }    
     

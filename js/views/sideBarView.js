@@ -89,7 +89,7 @@ var SideBarView = function (service) {
         }else{
             log.error("no GUI panels are selected");
         }
-        service.pincher.setAngles(rads_array);
+        service.setAngles(rads_array);
         
         //service.setPoseByID(myID, ax_array);
         service.pincher.toolPoint.position.set(myPose.tpX, myPose.tpZ, -myPose.tpY);

@@ -18,7 +18,16 @@ var Pose = function(pose_index){
             return [m1,m2,m3,m4,m5];
         },
         set motors (motors){
-            assert(typeof motors[0] !== "string");
+           
+            //assert limits between o and 1024
+            for (var i=0; i<motors.length; i++){
+                /**
+                if (!between(motors[i], 0, 1024)){
+                    console.log("motor[{1}] = {0} is not between 0, 1024".format(motors[i], i));
+                }
+                **/
+                assert(typeof motors[i] !== "string");
+            }
             this.m1 = motors[0];
             this.m2 = motors[1];
             this.m3 = motors[2];
@@ -46,16 +55,16 @@ var Pose = function(pose_index){
         rad4: Math.PI,
         rad5: Math.PI,
         get rads(){
-            return [rad1,rad2,rad3,rad4,rad5];
+            return [this.rad1,this.rad2,this.rad3,this.rad4,this.rad5];
         },
         set rads (rads){
             assert(typeof rads[0] === "number"); //remove asserts later
-            this.rad1 = rads[0];
-            this.rad2 = rads[1];
-            this.rad3 = rads[2];
-            this.rad4 = rads[3];
+            this.rad1 = normalizeAngle(rads[0]); //probably will want to normalize all of the rads
+            this.rad2 = (rads[1]);
+            this.rad3 = (rads[2]);
+            this.rad4 = (rads[3]);
             if (rads.length > 4){
-                this.rad5 = rads[4];
+                this.rad5 = (rads[4]);
             }
         },        
         tpX : 0,
@@ -65,24 +74,26 @@ var Pose = function(pose_index){
         get TPA(){
             return [tpX,tpY,tpZ,tpGA];
         },
-        set TPA (tps){
+        set TPA (tps){//set TP by array
             assert(typeof tps[0] === "number");
             this.tpX = tps[0];
             this.tpY = tps[1];
             this.tpZ = tps[2];
             if (tps.length > 3 ){
+                //console.trace("setting tp Arr {0}".format(tps[3]));
                 this.tpGA = tps[3];
             }
         },
         get TPD(){
             return {x:tpX,y:tpY, tpZ:z, ga:tpGA};
         },
-        set TPD (tps_d){
+        set TPD (tps_d){//set TP by dictionary object
             assert(typeof tps_d.x === "number");
             this.tpX = tps_d.x;
             this.tpY = tps_d.y;
             this.tpZ = tps_d.z;
             if(tps_d.ga){
+                console.log("setting TP dict {0}".format(tps_d.ga));
                 this.tpGA = tps_d.ga;
             }
         },        

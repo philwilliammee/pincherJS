@@ -25,11 +25,10 @@ var NavView = function ( service ) {
         var myChecked= $(this).is(':checked');
         
         if (myChecked){
-            log.info("cb1Clicked Checked not implemented");
+            service.doMotorLimits = true;
         }else{
-            log.info("unchecked");
-        }
-        
+            service.doMotorLimits = false;
+        }  
     }
     function cb2Clicked(val){
         var myChecked= $(this).is(':checked');
