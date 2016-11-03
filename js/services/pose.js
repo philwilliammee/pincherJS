@@ -32,7 +32,7 @@ var Pose = function(pose_index){
             this.m2 = motors[1];
             this.m3 = motors[2];
             this.m4 = motors[3];
-            if (motors.length > 4){
+            if (motors.length > 4 && motors[4]){
                 this.m5 = motors[4];
             }
         },
@@ -45,7 +45,7 @@ var Pose = function(pose_index){
             this.m2 = mD.m2;
             this.m3 = mD.m3;
             this.m4 = mD.m4;
-            if (mD.m1 ){
+            if (mD.m5 ){
                 this.m5 = mD.m5;
             }
         },        
@@ -63,7 +63,7 @@ var Pose = function(pose_index){
             this.rad2 = (rads[1]);
             this.rad3 = (rads[2]);
             this.rad4 = (rads[3]);
-            if (rads.length > 4){
+            if (rads.length > 4 && rads[4]){
                 this.rad5 = (rads[4]);
             }
         },        
@@ -79,7 +79,7 @@ var Pose = function(pose_index){
             this.tpX = tps[0];
             this.tpY = tps[1];
             this.tpZ = tps[2];
-            if (tps.length > 3 ){
+            if (tps.length > 3 && tps[3] ){
                 //console.trace("setting tp Arr {0}".format(tps[3]));
                 this.tpGA = tps[3];
             }

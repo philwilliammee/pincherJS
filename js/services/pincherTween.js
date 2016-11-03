@@ -67,33 +67,8 @@ function sequencer( service ){
 
     
     function update(){//@TODO move the testing out of here and into set position property
-        service.pincher.setSpheresAngles([
-            coords.sroll, coords.shoulder, coords.elbow, coords.wrist
-        ]);
-        var col = false;
-        if ( service.doCollisionDetect ){
-            col = service.sphereCollision();
-        }
-        
-        if (col){
-            //probably should delete the tween and make a new tween for smooth transitions
-            var warning = "Spere-{0} colided with Sphere-{1}".format(col.spheres[0],col.spheres[1]);
-            log.warning(warning);
-            return;
-        }else{
-            service.setAngles([coords.sroll,coords.shoulder,coords.elbow,coords.wrist]);
-        }
-        
-        if (service.doMotorLimits){
-            for (var rad in coords){
-                ret = radLimits(coords[rad]);
-                if (ret.e){
-                    log.warning("error {0} {1}".format(ret.e, rad));
-                    return;//
-                }
-                coords[rad] = ret.rad;
-            }
-        }        
+
+        service.setAngles([coords.sroll,coords.shoulder,coords.elbow,coords.wrist]);
         
     }
     

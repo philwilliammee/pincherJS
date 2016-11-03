@@ -71,7 +71,6 @@ var Service = function () {
             var ret = parent.rads_2_TP(rad_array, "addOffset");
             //set the TP
             !ret.e ? pose.TPA = ret.tp : console.log("error");
-
             return pose;
         }
         return true;
@@ -86,12 +85,16 @@ var Service = function () {
             pose.TPA = TPS;
             var ret = parent.TP2Rads(TPS[0], TPS[1], TPS[2], TPS[3] );
             
-            !ret.e ? pose.rads = ret.rads : console.log("error");
-            var ax_array = parent.radsToMotors(pose.rads);
-            //console.log(ax_array);
-            pose.motors = ax_array;
-
-            return pose;
+            if (!ret.e){
+                pose.rads = ret.rads;
+                var ax_array = parent.radsToMotors(pose.rads);
+                //console.log(ax_array);
+                pose.motors = ax_array;
+                return pose;                
+            }else{
+                //remove after debug this is usualy because tardeted position can not be reached
+                console.log("error in TP2Rads");
+            }
         }else{
             log.info("Please select a pose");
         }
@@ -174,23 +177,19 @@ var Service = function () {
     //converts motor position to radians and adds the offset
     //needs physical testing
     this.motorsToRads = function (motorArray) {
-        //problem with modify active pose when running sequence
-        //parent.modifyActivePose(motorArray);//if a pose is selected update it
-        //
         //should assert length of motor array here
         //need to verify motors are turning in the correct direction
-
-        //error here maybe this should only return positive radians
-        //var servoRadOffset = [-4.71239, -1.5708, -3.14159, -3.14159];
-        var servoRadOffset = [-3.14159, -3.14159, -3.14159, -3.14159];
+        // 512 ax = 180 degrees apply offset to set 512 ax to 0 deg.
+        var servoRadOffset = [-3.14159, -3.14159, -3.14159, -3.14159];//the array can be removed and just apply value
         var radArray = [];
         for (var i = 0; i < motorArray.length; i++) {
             var rad = ((ax_2_rad(motorArray[i])));//may need modulo math.PI
             rad = (rad + servoRadOffset[i]);// apply offset may need modulo math.PI
             //rad=(rad+(2*Math.PI))%(2*Math.PI);
-            if (0 > rad > 6.28) {
-                console.log("error " + rad);
-                rad = rad % (2 * Math.PI);
+            //if (-3.14 > rad || rad > 3.18) {
+            if (!between(rad, -Math.PI, Math.PI)) {
+                console.log("error " + rad + " angle: "+i);
+                rad = normalizeAngle(rad);
             }          
 
             radArray.push(rad);
@@ -228,11 +227,45 @@ var Service = function () {
         }
         return col;
     };
+    
+    
 
     this.setAngles = function (arr) {
-        arr[0] = arr[0] - 1.5708;
-        arr[1] = arr[1] + 1.5708;
-        parent.pincher.setAngles(arr, "service.setAngles");
+        parent.pincher.setSpheresAngles( arr );
+        var col = false;
+        if ( parent.doCollisionDetect ){
+            col = parent.sphereCollision();
+        }
+        
+        if (col){
+            //probably should delete the tween and make a new tween for smooth transitions
+            // could use more error handling to find a position that works like rotate gripper to pick items close to body
+            var warning = "Spere-{0} colided with Sphere-{1}".format(col.spheres[0],col.spheres[1]);
+            log.warning(warning);
+            return;
+        }else{
+            //apply any offsets before seting angles
+            if (typeof parent.applyOffset === 'function') { 
+              arr = parent.applyOffset(arr);
+            }else{
+                console.trace("warning you should apply offst in settings");
+            }
+            
+            parent.pincher.setAngles(arr, "service.setAngles");
+            
+        }  
+        
+        if (parent.doMotorLimits){
+            for (var rad in arr){
+                ret = radLimits(arr[rad]);
+                if (ret.e){
+                    log.warning("error {0} {1}".format(ret.e, rad));
+                    return;//
+                }
+                arr[rad] = ret.rad;
+            }
+        }               
+
     };
     
     this.getAngles = function(){
@@ -240,14 +273,16 @@ var Service = function () {
     };
     
     this.rads_2_TP = function(angles, caller){
-        //if this is called from IK and rads do not add offset
-        if (caller === "addOffset"){
-            angles[0] = angles[0] - 1.5708;
-            angles[1] = angles[1] + 1.5708;  
-        }else{
-            console.trace("no offset");
-        }
+        //if this is called from IK and rads do not add offset IS this correct?
         //if called from motors add offset
+        if (caller === "addOffset" && typeof parent.removeOffset === 'function'){
+
+            angles = parent.removeOffset( angles );
+            
+        }else{
+            console.trace("no offset removed");
+        }
+        
         var res = parent.ik.rads_2_TP(angles, "service.Rads_2_TP");
         return res;
     };    
