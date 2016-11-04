@@ -22,12 +22,15 @@
             SideBarView.prototype.template = Handlebars.compile($("#sideBar-tpl").html());
             EditPoseMdalContentView.prototype.template = Handlebars.compile($("#editPoseModal-tpl").html());
             $("#sideBarTemplate").html(new SideBarView(service).render().$el);
+            
             // test the pose editor
             if (service.pincher){
+                functionalTest(service);
                 service.buildPosetest();
             }else{
                 console.log("Pincher arm not initialized");
-            }               
+            }     
+            
         });  
         
         $("#runSequenceTemplate").load("./templates/runSequencePanel.html", function(tmpl){

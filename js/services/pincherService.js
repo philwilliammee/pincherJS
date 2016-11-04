@@ -9,10 +9,11 @@
 var Service = function () {
     var parent = this;
     //I really want to update this only with getters and setters make this local
-    this.poses = [];
+    this.poses = new Poses();
+    console.log(this.poses);
     this.doCollisionDetect = false;
     this.doMotorLimits = false;
-    var pose_index = 0;
+    
 
     //recieves the dom the robot goes in
     this.init = function (canvasContainer) {
@@ -25,17 +26,13 @@ var Service = function () {
     };
 
     this.getPoseByID = function (poseID) {
-        /**
-        for (var i = 0; i < parent.poses.length; i++) {
-            if (myID === parent.poses[i].id) {
-                return parent.poses[i];
-            }
-        }
-        **/
-       return parent.poses[poseID];
+        
+        return parent.poses.findById( poseID );
+
     };
 
     this.getActivePose = function(){
+        //this actually should be name
         var poseID = parent.poseEditor.getActive();//initialized in sideBarView
         return parent.getPoseByID(poseID);
     };
@@ -100,54 +97,6 @@ var Service = function () {
         }
         return false;
     }; 
-
-    // generate some random poses for testing 
-    // this could be replaced by a nice algorithm
-
-    this.buildMotortest = function () {
-        var jLine = [];
-        console.log("50 random test poses are created in pose editor panel to test the sequencer, and panel functions");
-        for (i = 0; i < 20; i++) {
-            var newPose = new Pose(pose_index); //new parent.pose(); 
-            pose_index++;
-            parent.poses.push(newPose);
-            var testArray = [Math.floor(Math.random() * 1023) + 1, Math.floor(Math.random() * 1023) + 1, Math.floor(Math.random() * 1023) + 1, Math.floor(Math.random() * 1023) + 1];
-            var pose = parent.setPoseByID(newPose.id, testArray);
-
-            //Testing
-            jLine.push({x: pose.tpX, y: pose.tpY, z: pose.tpZ});
-
-        }
-        //update the pose editor
-        parent.poseEditor.render();
-        //Testing: calculates linear path
-        parent.pincher.drawLine(jLine);
-    };
-
-    this.buildPosetest = function () {
-        var jLine = [];
-        console.log("50 random test poses are created in pose editor panel to test the sequencer, and panel functions");
-        for (var i = 0; i < 20; i++) {
-            var newPose = new Pose(pose_index); //new parent.pose(); 
-            newPose.ga = 0;
-            pose_index++;
-
-            var testArray = [Math.floor(Math.random() * 230) - 115, Math.floor(Math.random() * 230) - 115, Math.floor(Math.random() * 230) - 115, 0];
-            //convert TP to radians
-            var pose = parent.setPoseByTP(newPose, [testArray[0], testArray[1], testArray[2], 0]);
-            if (pose){
-                //Testing
-                jLine.push({x: pose.tpX, y: pose.tpY, z: pose.tpZ});
-                parent.poses.push(newPose);
-            }
-
-
-        }
-        //update the pose editor
-        parent.poseEditor.render();
-        //Testing: calculates linear path
-        parent.pincher.drawLine(jLine);
-    };
 
     // error convertin rads to motors
     //@TODO fix this so it uses radians

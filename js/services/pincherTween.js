@@ -13,6 +13,7 @@
 function sequencer( service ){
     //current sequence
     var sequence = 0;
+    var pose = service.getPoseByID(0);
     //tween stuff
     var curPose = [0, 0, 0, 0];
     if (service.pincher){
@@ -25,17 +26,19 @@ function sequencer( service ){
     //set the tween as a service object
     //PROBLEM TWEEN isn not moving across origin @TODO Fix this
     service.tween = new TWEEN.Tween(coords)
-            .to({ sroll: coords[0],//initial coordinates
-                  shoulder:coords[1],
-                  elbow: coords[2],
-                  wrist: coords[3]
+            .to({ sroll: pose.rad1,//initial coordinates
+                  shoulder:pose.rad2,
+                  elbow: pose.rad3,
+                  wrist: pose.rad4
             }, service.timeDelta)
             //.delay(0)
             //.easing(TWEEN.Easing.Elastic.InOut)
             .onUpdate(update)
             .onComplete(function() { 
                 //get the next sequence and run it
-                var pose = service.poses[sequence];
+       
+                pose = service.poses.moveNext();
+
                 //move the scroll bar to keep the pose in view. this could be added to pose editor
                 if (pose && service.poseEditor){
                     service.poseEditor.setActiveByID(pose.id);
@@ -57,11 +60,6 @@ function sequencer( service ){
                 }, service.timeDelta);
                 
                 //log.info("moving to "+  JSON.stringify([pose.m1, pose.m2, pose.m3, pose.m4]) + " seq: "+ (sequence)); 
-                if (sequence < service.poses.length-1){
-                    sequence++;
-                }else{
-                    sequence = 0;
-                }                       
 
             } );  
 

@@ -17,13 +17,15 @@
             </thead>
             <tbody>
                 {{#each this}}
-                <tr id={{id}} class="clickable-row {{active}}"><th scope="row">{{id}}</th>
-                    <td>{{m1}}</td>
-                    <td>{{m2}}</td>
-                    <td>{{m3}}</td>
-                    <td>{{m4}}</td>
-                    <td>{{m5}}</td>                                
-                </tr>
+                    {{#each this}}
+                        <tr id={{id}} class="clickable-row {{active}}"><th scope="row">{{id}}</th>
+                            <td>{{m1}}</td>
+                            <td>{{m2}}</td>
+                            <td>{{m3}}</td>
+                            <td>{{m4}}</td>
+                            <td>{{m5}}</td>                                
+                        </tr>
+                    {{/each}}
                 {{/each}}
             </tbody>
         </table>

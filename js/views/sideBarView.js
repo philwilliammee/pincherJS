@@ -38,7 +38,8 @@ var SideBarView = function (service) {
     }    
 
     this.render = function() {
-        this.$el.html(this.template(service.poses));
+        //this is interesting not sure why I did it like this just gets all poses and renders them
+        this.$el.html(this.template( service.poses.all() ));
         $('.modal-content', this.$el).html(editPoseModalView.$el);
         return this;
     };
@@ -50,13 +51,15 @@ var SideBarView = function (service) {
     
     this.setActiveByID = function(myID){
         $(this).addClass('active').siblings().removeClass('active');
-        for ( var i=0; i<service.poses.length; i++){
-            if (myID === service.poses[i].id){
-                service.poses[i].active = "active";
+        $.each( service.poses.all(), function(key, val){
+            var pose = val[key];
+            //console.log(this);
+            if (pose.id === myID){
+                pose.active = "active";
             }else{
-                service.poses[i].active = "";
+                pose.active = "";
             }
-        }   
+        });
         parent.render();
     };
     
@@ -66,7 +69,26 @@ var SideBarView = function (service) {
         var myPose;
         $(this).addClass('active').siblings().removeClass('active');
         var myID = parseInt($(this).prop("id"));
-        for ( var i=0; i<service.poses.length; i++){
+        //var pose = service.getPoseByID(myID);
+        $.each( service.poses.all(), function(key, val){
+            var pose = val[key];
+            //console.log(this);
+            if (pose.id === myID){
+                console.log("hit "+pose.id);
+                pose.active = "active";
+                myPose = pose;
+            }else{
+                pose.active = "";
+            }
+        });
+        /**
+        if (pose){
+            pose.active = "active";
+            myPose = pose;
+        }
+        //seems like there has to be a better way to do this
+        /**
+        for ( var i=0; i<service.poses.length(); i++){
             if (myID === service.poses[i].id){
                 service.poses[i].active = "active";
                 myPose = service.poses[i];
@@ -74,6 +96,7 @@ var SideBarView = function (service) {
                 service.poses[i].active = "";
             }
         }
+        **/
         //get the current controller
         var ax_array = [myPose.m1, myPose.m2, myPose.m3, myPose.m4];
         var rads_array = [myPose.rad1, myPose.rad2, myPose.rad3, myPose.rad4];
