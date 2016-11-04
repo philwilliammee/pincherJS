@@ -11,8 +11,9 @@ functionalTest = function(service){
     
     service.buildMotortest = function () {
         var jLine = [];
-        console.log("50 random test poses are created in pose editor panel to test the sequencer, and panel functions");
-        for (i = 0; i < 20; i++) {
+        var numOfPoses = 10;
+        console.log(numOfPoses+" random test poses are created in pose editor panel to test the sequencer, and panel functions");
+        for (i = 0; i < numOfPoses ; i++) {
             /**
             var newPose = new Pose(pose_index); //new service.pose(); 
             pose_index++;
@@ -21,10 +22,17 @@ functionalTest = function(service){
            
             var newPose = service.poses.add();
             var testArray = [Math.floor(Math.random() * 1023) + 1, Math.floor(Math.random() * 1023) + 1, Math.floor(Math.random() * 1023) + 1, Math.floor(Math.random() * 1023) + 1];
-            var pose = service.setPoseByID(newPose.id, testArray);
+            var pose = service.setPoseFromAxs(newPose, testArray);
 
             //Testing
-            jLine.push({x: pose.tpX, y: pose.tpY, z: pose.tpZ});
+            if (pose){
+                //Testing
+                jLine.push({x: pose.tpX, y: pose.tpY, z: pose.tpZ});
+                
+                //service.poses.push(newPose);
+            }else{
+                console.log("error setting pose");
+            }
 
         }
         //update the pose editor
@@ -35,7 +43,7 @@ functionalTest = function(service){
 
     service.buildPosetest = function () {
         var jLine = [];
-        var numOfPoses = 3;
+        var numOfPoses = 10;
         console.log(numOfPoses+" random test poses are created in pose editor panel to test the sequencer, and panel functions");
         for (var i = 0; i < numOfPoses; i++) {
             var newPose = service.poses.add(); //new service.pose(); 

@@ -52,7 +52,7 @@ var SideBarView = function (service) {
     this.setActiveByID = function(myID){
         $(this).addClass('active').siblings().removeClass('active');
         $.each( service.poses.all(), function(key, val){
-            var pose = val[key];
+            var pose = this;
             //console.log(this);
             if (pose.id === myID){
                 pose.active = "active";
@@ -71,7 +71,7 @@ var SideBarView = function (service) {
         var myID = parseInt($(this).prop("id"));
         //var pose = service.getPoseByID(myID);
         $.each( service.poses.all(), function(key, val){
-            var pose = val[key];
+            var pose = this;
             //console.log(this);
             if (pose.id === myID){
                 console.log("hit "+pose.id);
@@ -81,22 +81,7 @@ var SideBarView = function (service) {
                 pose.active = "";
             }
         });
-        /**
-        if (pose){
-            pose.active = "active";
-            myPose = pose;
-        }
-        //seems like there has to be a better way to do this
-        /**
-        for ( var i=0; i<service.poses.length(); i++){
-            if (myID === service.poses[i].id){
-                service.poses[i].active = "active";
-                myPose = service.poses[i];
-            }else{
-                service.poses[i].active = "";
-            }
-        }
-        **/
+
         //get the current controller
         var ax_array = [myPose.m1, myPose.m2, myPose.m3, myPose.m4];
         var rads_array = [myPose.rad1, myPose.rad2, myPose.rad3, myPose.rad4];
@@ -123,17 +108,14 @@ var SideBarView = function (service) {
     
     function addBtnClicked(event){
         log.info("added a new pose");
-        service.poses.push(new service.pose());
+        service.poses.add();
         parent.render();
         return false;
     };
     
     function removeBtnClicked(event){
         var myID = parseInt($(".active").find('th').text());
-        service.poses = service.poses.filter(function( obj ) {
-            return obj.id !== myID;
-        });
-        
+        service.poses.removeById( myID );
         console.log("remove");
         parent.render();
         //this.remove();
@@ -143,28 +125,15 @@ var SideBarView = function (service) {
     function upBtnClicked(event){
         console.log("up");
         var myID = parseInt($(".active").find('th').text());
-        $(service.poses).each(function(i, el){
-            if (el.id === myID){
-               service.poses.move(i, --i);
-               parent.render();
-               return false;
-            }
-        });
-        
-        return false;
+        service.poses.moveUpById( myID );
+        parent.render();        
+
     };  
     
     function downBtnClicked(event){
         var myID = parseInt($(".active").find('th').text());
-        //replace with for loop
-        $(service.poses).each(function(i, el){
-            if (i<service.poses.length-1 && el.id === myID){
-               service.poses.move(i, ++i);
-               parent.render();
-            }else{
-                console.log("cant move element");
-            }
-        });
+        service.poses.moveDownById( myID );
+        parent.render();
     };  
     
     this.editRow=function(){

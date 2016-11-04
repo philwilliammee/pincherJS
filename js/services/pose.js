@@ -9,18 +9,9 @@ Poses = function () {
     // this should really be implemented here
     var activePose = 0;
     var pose_index = 0;
-    var poses = [];//ordered structure this feels dumb 
+    var poses = [];//ordered structure this feels like it should be changed to either dict or array
     var self = this;
 
-    //maybe change structure to
-    /**
-     poses: [1, 2, 3],
-     index: {
-     a: 0,
-     b: 1,
-     c: 2
-     }
-     **/
 
     //careful this does not return an array of poses
     // it returns an array of objects
@@ -30,50 +21,83 @@ Poses = function () {
 
     this.add = function () {
         var newPose = new Pose(pose_index);
-        var myObj = {};
-        myObj[pose_index] = newPose;
-        poses.push(myObj);
+        poses.push(newPose);
         pose_index++;
         return newPose;
     };
 
-    this.removeById = function (id) {
-        delete poses[id];
+    this.removeById = function ( myID ) {
+        poses = poses.filter(function( obj ) {
+            return obj.id !== myID;
+        });    
+
     };
 
-    this.moveUp = function () {
+    this.moveUp = function (pose) {
         console.log("not implemented yet");
 
     };
 
-    this.moveDown = function () {
+    this.moveUpById = function (myID) {
+        //after moving the pose should I change the id?
+        $(poses).each(function(i, el){
+            if (el.id === myID){
+               poses.move(i, --i);
+               return false;
+            }
+        });
+    };
+
+    this.moveDown = function (pose) {
         console.log("not implemented yet");
+
+    };
+
+    this.moveDownById = function ( myID ) {
+        /**
+        for (var i =0; i<poses.length; i++){
+            if (poses[i].id === myID ){
+                poses.move(i, ++i);
+                return;
+            }
+        }
+        **/
+
+        
+        $(poses).each(function (i, el) {
+            if (i < poses.length - 1 && el.id === myID) {
+                poses.move(i, ++i);
+            } else  if (i === poses.length - 1 && el.id === myID) {
+                poses.move(i, 0);
+            }
+        });
+        
 
     };
 
     this.findById = function (id) {
         //console.log(id);
         if (poses[id]) {
-            return poses[id][id];//this seems overkill I hope this structure is worth it
+            return poses[id];//this seems overkill 
         } else {
             console.log("error can not find pose " + id);
             return false;
         }
     };
-    
+
     this.moveNext = function ( ) {
         //may need to verify pose exists
-        if (activePose >= poses.length - 1){
+        if (activePose >= poses.length - 1) {
             activePose = 0;
-            return self.findById( activePose );
+            return self.findById(activePose);
         } else {
             activePose++;
             return self.findById(activePose);
         }
 
-    };    
+    };
 
-    this.getNext = function ( pose ) {
+    this.getNext = function (pose) {
         //may need to verify pose exists
         var id = pose.id;
         if (id >= poses.length - 1)

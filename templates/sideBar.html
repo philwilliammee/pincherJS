@@ -16,17 +16,17 @@
                 <tr><th>#</th><th>m1</th><th>m2</th><th>m3</th><th>m4</th><th>MS</th></tr>
             </thead>
             <tbody>
+
                 {{#each this}}
-                    {{#each this}}
-                        <tr id={{id}} class="clickable-row {{active}}"><th scope="row">{{id}}</th>
-                            <td>{{m1}}</td>
-                            <td>{{m2}}</td>
-                            <td>{{m3}}</td>
-                            <td>{{m4}}</td>
-                            <td>{{m5}}</td>                                
-                        </tr>
-                    {{/each}}
+                    <tr id={{id}} class="clickable-row {{active}}"><th scope="row">{{id}}</th>
+                        <td>{{m1}}</td>
+                        <td>{{m2}}</td>
+                        <td>{{m3}}</td>
+                        <td>{{m4}}</td>
+                        <td>{{m5}}</td>                                
+                    </tr>
                 {{/each}}
+
             </tbody>
         </table>
     </div><!--panel--> 

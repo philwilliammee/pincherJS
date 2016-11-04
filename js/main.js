@@ -4,41 +4,42 @@
 
 //build all of the panel elements in the main html page
 (function () {
-    /* ---------------------------------- Local Variables ---------------------------------- */ 
+    /* ---------------------------------- Local Variables ---------------------------------- */
     var service = new Service();
     //pass the service the dom the robot goes in "canvasContainer"
     //service returns the dom element with robot in it "pincherDom"
-    service.init(document.getElementById( 'jumbotron' )).done(function(pincherDom){
-        
-        var container = document.getElementById( 'myCanvas' );
-        container.appendChild( pincherDom );
+    service.init(document.getElementById('jumbotron')).done(function (pincherDom) {
+
+        var container = document.getElementById('myCanvas');
+        container.appendChild(pincherDom);
         //render the doms
-        $("#navTemplate").load("./templates/nav.html", function(tmpl){
+        $("#navTemplate").load("./templates/nav.html", function (tmpl) {
             NavView.prototype.template = Handlebars.compile($("#navbar-tpl").html());
             $("#navTemplate").html(new NavView(service).render().$el);
-        }); 
+        });
 
-        $("#sideBarTemplate").load("./templates/sideBar.html", function(tmpl){
+        $("#sideBarTemplate").load("./templates/sideBar.html", function (tmpl) {
             SideBarView.prototype.template = Handlebars.compile($("#sideBar-tpl").html());
             EditPoseMdalContentView.prototype.template = Handlebars.compile($("#editPoseModal-tpl").html());
             $("#sideBarTemplate").html(new SideBarView(service).render().$el);
-            
+
             // test the pose editor
-            if (service.pincher){
+            if (service.pincher) {
                 functionalTest(service);
-                service.buildPosetest();
-            }else{
+                //service.buildPosetest();
+                service.buildMotortest();
+            } else {
                 console.log("Pincher arm not initialized");
-            }     
-            
-        });  
-        
-        $("#runSequenceTemplate").load("./templates/runSequencePanel.html", function(tmpl){
+            }
+
+        });
+
+        $("#runSequenceTemplate").load("./templates/runSequencePanel.html", function (tmpl) {
             RunSequenceView.prototype.template = Handlebars.compile($("#runSequence-tpl").html());
             $("#runSequenceTemplate").html(new RunSequenceView(service).render().$el);
-        });         
-        
-        $("#panel1Template").load("./templates/panel1.html", function(tmpl){
+        });
+
+        $("#panel1Template").load("./templates/panel1.html", function (tmpl) {
             GUI_View.prototype.template = Handlebars.compile($("#panel1-tpl").html());
             $("#panel1Template").html(new GUI_View(service).render().$el);
             //@ todo render GUI inside panel1View 
@@ -46,26 +47,26 @@
             service.gui = new GUI(service);
             service.gui.gui.domElement.id = "gui";
             $("#gui").addClass("gui");
-            $("#gui").detach().appendTo("#kinematicsGUI");  
+            $("#gui").detach().appendTo("#kinematicsGUI");
             //build and attach the Motors controller GUI 
             service.ax_gui = new ax_GUI(service);
             service.ax_gui.gui.domElement.id = "ax_gui";
             $("#ax_gui").addClass("gui");
-            $("#ax_gui").detach().appendTo("#motorsGUI");    
+            $("#ax_gui").detach().appendTo("#motorsGUI");
             //build and attach the Radian controller GUI
             service.rads_gui = new radsGUI(service);
             service.rads_gui.gui.domElement.id = "rads_gui";
             $("#rads_gui").addClass("gui");
-            $("#rads_gui").detach().appendTo("#radsGUI");   
+            $("#rads_gui").detach().appendTo("#radsGUI");
 
-        });   
-        
-        $("#panel2Template").load("./templates/panel2.html", function(tmpl){
-            Panel2View.prototype.template = Handlebars.compile($("#panel2-tpl").html());
-            $("#panel2Template").html(new Panel2View(service).render().$el);        
         });
-        
-    });    
+
+        $("#panel2Template").load("./templates/panel2.html", function (tmpl) {
+            Panel2View.prototype.template = Handlebars.compile($("#panel2-tpl").html());
+            $("#panel2Template").html(new Panel2View(service).render().$el);
+        });
+
+    });
 
 }());
 

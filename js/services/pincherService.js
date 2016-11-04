@@ -10,7 +10,6 @@ var Service = function () {
     var parent = this;
     //I really want to update this only with getters and setters make this local
     this.poses = new Poses();
-    console.log(this.poses);
     this.doCollisionDetect = false;
     this.doMotorLimits = false;
     
@@ -149,16 +148,29 @@ var Service = function () {
 
     //@todo encapsulate this in its own function
     this.timeDelta = 5000; //ms
-    sequencer(this);
+    
 
     //start the tween sequence
     this.playSequence = function () {
-        parent.tween.start();
+        if (! parent.tween ){
+            parent.tween = new Sequencer(this);
+            parent.tween.chain(parent.tween);
+            parent.tween.start();
+        }else {
+            parent.tween.start();
+        }
+        
     };
     //stop the tween sequence
     this.stopSequence = function () {
         parent.tween.stop();
+        delete parent.tween;
+        
     };
+    
+    this.pauseSequence = function(){
+        parent.tween.stop();
+    }
 
     this.sphereCollision = function () {
         var data = parent.pincher.getSpheresPos();

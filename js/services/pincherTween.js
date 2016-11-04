@@ -10,7 +10,7 @@
 //currently only using synchronous movement of joints @TODO add linear interpolation of TP
 
 //THIS is all wrong need calculate sequence at start check for collisions ect and then iterate through the sequence
-function sequencer( service ){
+var Sequencer = function( service ){
     //current sequence
     var sequence = 0;
     var pose = service.getPoseByID(0);
@@ -25,7 +25,7 @@ function sequencer( service ){
     //var moveToCoord = { sroll: 1.57, shoulder:1.57, elbow:0, wrist:0};
     //set the tween as a service object
     //PROBLEM TWEEN isn not moving across origin @TODO Fix this
-    service.tween = new TWEEN.Tween(coords)
+    var tween = new TWEEN.Tween(coords)
             .to({ sroll: pose.rad1,//initial coordinates
                   shoulder:pose.rad2,
                   elbow: pose.rad3,
@@ -70,6 +70,6 @@ function sequencer( service ){
         
     }
     
-    service.tween.chain(service.tween);
+    return tween;
 
 } 
