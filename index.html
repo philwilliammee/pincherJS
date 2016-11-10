@@ -55,6 +55,251 @@ THE SOFTWARE.
             </div>
         </div><!--/row-->
     </div><!--/.container-->
+    
+<!-- *******************  TEMPLATES ******************* -->   
+
+<script id="panel1-tpl" type="text/template">
+    <div class="col-xs-6 col-lg-6 well">
+    <ul class="nav nav-pills">
+        <li id="showIK"  class="active tabs" ><a>IK</a></li>
+        <li id="showMotors" class="tabs"><a>Motors</a></li>
+        <li id="showRads" class="tabs"><a>Rads</a></li>
+        <p class="navbar-text" >Controllers</p>
+    </ul>
+        <!--div id="myGUI"></div>
+        <div id="myGUI2" hidden></div-->
+        <div id="kinematicsGUI"></div>
+        <div id="motorsGUI" hidden></div>
+        <div id="radsGUI" hidden></div>
+    </div><!--/.col-xs-6.col-lg-4-->
+</script>
+
+<script id="panel2-tpl" type="text/template">
+    <div class="col-xs-6 col-lg-6 well">
+        <p>Panel 2</p>
+        <p><button class="btn default-btn" id="infoButton" >display motor positions</button> <button class="btn default-btn" id="sphereInfoButton" >display jSphere positions</button></p>
+        <p><button class="btn default-btn" id="getTP" >display TP</button> <button class="btn default-btn" id="testCollision" >collision detect</button> </p>
+        <p><button class="btn default-btn" id="testRadLimits" >angle limits</button></p>
+    </div><!--/.col-xs-6.col-lg-4-->
+</script>
+
+<script id="sideBar-tpl" type="text/template">
+<div class="sidebar-offcanvas" >
+    <!-- Default panel contents -->
+    <div id="sidebar" class="panel panel-default"> 
+        <div class="panel-heading">
+            <h4 class="text-center">Pose Editor</h4>
+        </div> 
+        <!-- could use this to show hide help -->
+        <!--div class="panel-body"> 
+            <p>Some default panel content here. </p> 
+        </div--> 
+
+        <table class="table">
+            <thead>
+                <tr><th>#</th><th>m1</th><th>m2</th><th>m3</th><th>m4</th><th>MS</th></tr>
+            </thead>
+            <tbody>
+
+                {{#each this}}
+                    <tr id={{id}} class="clickable-row {{active}}"><th scope="row">{{id}}</th>
+                        <td>{{m1}}</td>
+                        <td>{{m2}}</td>
+                        <td>{{m3}}</td>
+                        <td>{{m4}}</td>
+                        <td>{{m5}}</td>                                
+                    </tr>
+                {{/each}}
+
+            </tbody>
+        </table>
+    </div><!--panel--> 
+    <div class="btn-group sidebar-btns" role="group" aria-label="Pose Editor CRUD">
+        <button id="add-btn" type="button" class="btn btn-default sidebar-btn">Add</button>
+        <button id="remove-btn" type="button" class="btn btn-default sidebar-btn">Del</button>
+        <button id="up-btn" type="button" class="btn btn-default sidebar-btn">Up</button>
+        <button id="down-btn" type="button" class="btn btn-default sidebar-btn">Down</button>
+    </div>                
+</div> 
+
+<!-- Modal -->
+<div id="editModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+</script>
+
+
+<script id="editPoseModal-tpl" type="text/template">
+    <!-- Modal Header -->
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">
+    <span aria-hidden="true">&times;</span>
+    <span class="sr-only">Close</span>
+    </button>
+    <h4 class="modal-title" id="myModalLabel">
+    Pose editor - {{id}}
+    </h4>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+    <form role="form" id="editPoseForm">
+    <input type="text" value="{{id}}" id="id" readonly hidden/>
+    <div class="form-group row">
+    <div class="col-xs-2">
+    <label for="M1_input">M1</label>
+    <input type="number" class="form-control" id="m1" value="{{m1}}"/>
+    </div><div class="col-xs-2">
+    <label for="M2_input">M2</label>
+    <input type="number" class="form-control" id="m2" value="{{m2}}"/>
+    </div><div class="col-xs-2">
+    <label for="M2_input">M3</label>
+    <input type="number" class="form-control" id="m3" value="{{m3}}"/>
+    </div><div class="col-xs-2">
+    <label for="M2_input">M4</label>
+    <input type="number" class="form-control" id="m4" value="{{m4}}"/>
+    </div><div class="col-xs-2">
+    <label for="M2_input">M5</label>
+    <input type="number" class="form-control" id="m5" value="{{m5}}"/>
+    </div>
+    </div><!--form group -->
+    </form>             
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+    <button type="button" class="btn btn-default"
+    data-dismiss="modal">
+    Close
+    </button>
+    <button id="saveModal" type="button" class="btn btn-primary">
+    Save changes
+    </button>
+    </div>
+
+</script>
+
+<!-- the sequence panel layout -->
+<script id="runSequence-tpl" type="text/template">
+<div class="sidebar-offcanvas" >
+    <!-- Default panel contents -->
+    <div class="well">
+        <div class="container row">
+            <h4 class="text-center">Run Sequence</h4>
+            <hr />
+            <div class="player text-center">
+                <!--
+                <button type="button" id="button_fbw" class="btn" >
+                  <i class="fa fa-fast-backward"></i>
+                </button>
+        
+                <button type="button" id="button_bw" class="btn" >
+                  <i class="fa fa-backward"></i>
+                </button>
+                -->
+                <button type="button" id="button_play" class="btn fa fa-play" >
+                </button>
+
+                <button type="button" id="button_stop" class="btn fa fa-stop" >
+                </button>
+
+                <button type="button" id="button_fw" class="btn fa fa-forward" >
+                </button>
+                <!--
+                <button type="button" id="button_ffw" class="btn" >
+                  <i class="fa fa-fast-forward"></i>
+                </button>    
+              </div>
+                -->
+
+            </div>
+            <div class="form-group">
+                <label id="selEasing">Easing Curve</label>
+                <select class="form-control" id="selEasing">
+                    <option value="Linear.None">Linear.None</option>
+                    <option value="Quadratic.In">Quadratic.In</option>
+                    <option value="Quadratic.Out">Quadratic.Out</option>
+                    <option value="Quadratic.InOut">Quadratic.InOut</option>
+                    <option value="Cubic.In">Cubic.In</option>
+                    <option value="Cubic.Out">Cubic.Out</option>
+                    <option value="Cubic.InOut">Cubic.InOut</option>
+                    <option value="Quartic.In">Quartic.In</option>
+                    <option value="Quartic.Out">Quartic.Out</option>
+                    <option value="Quartic.InOut">Quartic.InOut</option>
+                    <option value="Quintic.In">Quintic.In</option>
+                    <option value="Quintic.Out">Quintic.Out</option>
+                    <option value="Quintic.InOut">Quintic.InOut</option>
+                    <option value="Sinusoidal.In">Sinusoidal.In</option>
+                    <option value="Sinusoidal.Out">Sinusoidal.Out</option>
+                    <option value="Sinusoidal.InOut">Sinusoidal.InOut</option>
+                    <option value="Exponential.In">Exponential.In</option>
+                    <option value="Exponential.Out">Exponential.Out</option>
+                    <option value="Exponential.InOut">Exponential.InOut</option>
+                    <option value="Circular.In">Circular.In</option>
+                    <option value="Circular.Out">Circular.Out</option>
+                    <option value="Circular.InOut">Circular.InOut</option>
+                    <option value="Elastic.In">Elastic.In</option>
+                    <option value="Elastic.Out">Elastic.Out</option>
+                    <option value="Elastic.InOut">Elastic.InOut</option>
+                    <option value="Back.In">Back.In</option>
+                    <option value="Back.Out">Back.Out</option>
+                    <option value="Back.InOut">Back.InOut</option>
+                    <option value="Bounce.In">Bounce.In</option>
+                    <option value="Bounce.Out">Bounce.Out</option>
+                    <option value="Bounce.InOut">Bounce.InOut</option>
+                </select>
+            </div>      
+        </div>
+    </div>                
+</div> 
+
+</script>
+
+<script id="navbar-tpl" type="text/template">
+    <nav class="navbar navbar-fixed-top navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" >pincherJS</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="#">Tools</a></li>
+                    <li><a href="#contact">Config</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            Settings <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+          <!-- replace checkboxes with toggle buttons -->
+            <li><span><input id ="settingsCB1" type="checkbox" >Enable Limits</span></li>
+            <li><span><input id="settingsCB2" type="checkbox" >Set Limits</span></li>
+            <li role="separator" class="divider"></li>
+            <li><span><input  id="settingsCB3" type="checkbox" >Enable Collision Detect</span></li>
+            <li><span><input id="settingsCB4" type="checkbox" >Set Collision Detect</span></li>
+            <li><span><input checked="true" id="settingsCB5" type="checkbox" >Show Collision Detect</span></li>
+            <li role="separator" class="divider"></li>
+            <li><span><input checked="true" id="settingsCB6" type="checkbox" >Show Tool Path</span></li>
+            <li><span><input id="settingsCB7" type="checkbox" >Show Tool Point</span></li>
+          </ul>
+        </li>
+
+            <li><a href="#about">About</a></li>
+      </ul>       
+            <div id="alert" class="col-xs-8 colxs-3">
+            </div><!-- /.nav-collapse -->
+        </div><!-- /.container -->
+    </nav><!-- /.navbar -->
+</script>
+
+
 
 <script src="build/three.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
