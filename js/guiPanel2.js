@@ -70,7 +70,7 @@ ax_GUI = function (service) {
             socket.send(JSON.stringify({
                 "stream": "intval",
                 "payload": {
-                    "pk": 0, //$(this).parent().attr("data-value-id"),
+                    "pk": 1, //$(this).parent().attr("data-value-id"),
                     "action": "update",
                     "data": {
                         "value": arr
