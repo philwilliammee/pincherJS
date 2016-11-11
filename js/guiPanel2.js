@@ -38,27 +38,47 @@ ax_GUI = function (service) {
     m5.onChange(function (value) {
 
     });
-    
-    function poseWorker(){
+
+    function poseWorker() {
         //get the slider positions
         var axArray = self.getMotorSliders();
         //update the pose with all values
         var pose = service.getActivePose();
         //var updatedPose = service.modifyActivePose(poseID);//if a pose is selected update it may want to change this to typical getpose by ID
         var updatedPose = service.setPoseFromAxs(pose, axArray);
-        if (updatedPose){
+        if (updatedPose) {
             //var rads = [updatedPose.rad1, updatedPose.rad2, updatedPose.rad3, updatedPose.rad4, updatedPose.rad5 ];
-            
+
             //set the ball for testing
-            service.pincher.toolPoint.position.set(updatedPose.tpX, updatedPose.tpZ, -updatedPose.tpY);  
+            service.pincher.toolPoint.position.set(updatedPose.tpX, updatedPose.tpZ, -updatedPose.tpY);
 
             //update the robots angles based on updated pose
             service.setAngles(updatedPose.rads);
-            
+
             service.poseEditor.render();
-        }else{
+            sendSocketData(axArray);
+
+        } else {
             log.warning("Please select a pose");
         }
+
+    }
+
+    function sendSocketData(arr) {
+        //$(this).parent().find("output").val($(this).val());
+        if (typeof socket !== "undefined") {
+            socket.send(JSON.stringify({
+                "stream": "intval",
+                "payload": {
+                    "pk": 0, //$(this).parent().attr("data-value-id"),
+                    "action": "update",
+                    "data": {
+                        "value": arr
+                    }
+                }
+            }));
+        }
+
     }
 
     //returns the current position values of the sliders

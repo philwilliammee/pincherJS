@@ -68,7 +68,7 @@
          });
          **/
 
-
+        
         NavView.prototype.template = Handlebars.compile($("#navbar-tpl").html());
         $("#navTemplate").html(new NavView(service).render().$el);
 
@@ -86,8 +86,6 @@
         } else {
             console.log("Pincher arm not initialized");
         }
-
-
 
         RunSequenceView.prototype.template = Handlebars.compile($("#runSequence-tpl").html());
         $("#runSequenceTemplate").html(new RunSequenceView(service).render().$el);
